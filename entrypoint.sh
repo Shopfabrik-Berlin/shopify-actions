@@ -11,7 +11,7 @@ if [ -n "$SHOPIFY_LOCALE" ]; then
     elif { [ -n "$TASK" ] && [ "$TASK" = "DEPLOY" ] ;} then
     # Check task is set and back -> do Deploy
         echo "Deploying $SHOPIFY_STORE_URL"
-        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json
+        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file config/settings_data.json locales
     fi
 else
     echo "locale is empty"
@@ -20,6 +20,6 @@ else
         theme download --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID
     elif { [ -n "$TASK" ] && [ "$TASK" = "DEPLOY" ] ;} then
         echo "Deploying $SHOPIFY_STORE_UL"
-        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json
+        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file config/settings_data.json locales
     fi
 fi
