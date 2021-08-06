@@ -12,7 +12,7 @@ if [ -n "$SHOPIFY_LOCALE" ]; then
     elif { [ -n "$TASK" ] && [ "$TASK" = "DEPLOY" ] ;} then
     # Check task is set and back -> do Deploy
         echo "Deploying $SHOPIFY_STORE_URL"
-        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json --ignored-file=locales/
+        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json --ignored-file=locales/ --ignored-file=templates/*.json
     elif { [ -n "$TASK" ] && [ "$TASK" = "PREVIEW" ] ;} then
         echo "Creating new theme"
         theme new --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --name="⚠[PREVIEW] - Shopfabrik $SHOPIFY_PREVIEW_NAME"
@@ -25,7 +25,7 @@ else
         theme download --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID
     elif { [ -n "$TASK" ] && [ "$TASK" = "DEPLOY" ] ;} then
         echo "Deploying $SHOPIFY_STORE_UL"
-        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json --ignored-file=locales/
+        theme deploy --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --themeid=$SHOPIFY_THEME_ID --nodelete --allow-live --ignored-file=config/settings_data.json --ignored-file=locales/ --ignored-file=templates/*.json
     elif { [ -n "$TASK" ] && [ "$TASK" = "PREVIEW" ] ;} then
         echo "Creating new theme"
         theme new --password=$SHOPIFY_PASSWORD --store=$SHOPIFY_STORE_URL --name="⚠[PREVIEW] - Shopfabrik $SHOPIFY_PREVIEW_NAME"
