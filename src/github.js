@@ -56,7 +56,7 @@ const createGitHubComment = async (prID, message) => {
   };
 
   const getPullRequestID = async () => {
-    console.log()
+    console.log("GITHUB CONTEXT", github.context)
     return  github.context.issue.number;
   };
 

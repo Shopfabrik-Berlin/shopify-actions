@@ -44,7 +44,7 @@ const getAssets = async function getShopifyAssets(themeID, params) {
     return await shopify.asset.list(themeID, params);
 };
 
-const deployTheme = async function deployShopifyTheme(id, options) {
+const deployTheme = async function deployShopifyTheme(id, {ignoredFiles}) {
     if (id) {
         console.log(`Found theme with ID: ${id}, deploying...`);
         return await themeKit.command('deploy', {
@@ -54,7 +54,7 @@ const deployTheme = async function deployShopifyTheme(id, options) {
         store: process.env.SHOPIFY_STORE_URL,
         themeid: id,
         timeout: '120s',
-        ignoredFiles: options.ignoredFiles || ['config/settings_data.json', 'locales/', 'templates/*.json']
+        ignoredFiles: ignoredFiles || ['config/settings_data.json', 'locales/', 'templates/*.json']
         });
     } else {
         console.log(`Theme ID does not exists ID: ${id} ... `)
