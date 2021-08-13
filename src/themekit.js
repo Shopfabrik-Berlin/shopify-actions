@@ -27,7 +27,7 @@ const createTheme = async function createShopifyTheme(name) {
           name
       });
     } else{
-        console.log(`Found theme: ${name} with ID: ${theme.id}, deleting...`);
+        console.log(`Found theme: ${name} with ID: ${theme.id} ...`);
     }
   };
 

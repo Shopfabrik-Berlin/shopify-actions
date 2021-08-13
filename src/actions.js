@@ -21,7 +21,7 @@ async function deploy(){
 
 async function preview(){
     const prID = await getPullRequestID()
-    const name = `⚠[PREVIEW] - Shopfabrik ${prID}`
+    const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
     await createTheme(name)
     await deployTheme(name)
 }
@@ -29,7 +29,7 @@ async function preview(){
 
 async function previewDelete(){
     const prID = await getPullRequestID()
-    const name = `⚠[PREVIEW] - Shopfabrik ${prID}`
+    const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
 }
 
 
