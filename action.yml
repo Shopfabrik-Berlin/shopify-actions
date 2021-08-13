@@ -2,8 +2,8 @@ name: 'Get Shopify theme'
 author: 'Christian'
 description: 'Get Shopify theme with Theme Kit'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
 branding:
   icon: 'shopping-bag'
   color: 'green'
