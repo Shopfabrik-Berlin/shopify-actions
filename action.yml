@@ -2,8 +2,13 @@ name: 'Get Shopify theme'
 author: 'Christian'
 description: 'Get Shopify theme with Theme Kit'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  image: 'src/index.js'
 branding:
   icon: 'shopping-bag'
   color: 'green'
+outputs:
+  theme-id:
+    description: 'Deployed theme id'
+  deploy-url:
+    description: 'The deploy URL'

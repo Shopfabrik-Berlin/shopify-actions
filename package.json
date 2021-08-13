@@ -1,0 +1,30 @@
+{
+  "name": "shopify-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest test/actions.test.js --setupFiles dotenv/config"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopfabrik-Berlin/shopify-actions.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shopfabrik-Berlin/shopify-actions/issues"
+  },
+  "homepage": "https://github.com/Shopfabrik-Berlin/shopify-actions#readme",
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0",
+    "@shopify/themekit": "^1.1.9",
+    "asana": "^0.18.6",
+    "dotenv": "^10.0.0",
+    "shopify-api-node": "^3.6.14"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
+}
