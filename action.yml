@@ -3,7 +3,7 @@ author: 'Christian'
 description: 'Get Shopify theme with Theme Kit'
 runs:
   using: 'node12'
-  image: 'src/index.js'
+  main: 'src/index.js'
 branding:
   icon: 'shopping-bag'
   color: 'green'
