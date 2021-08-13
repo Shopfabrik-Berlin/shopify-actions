@@ -64,7 +64,7 @@ const deployTheme = async function deployShopifyTheme(id, {ignoredFiles} = {}) {
 
 const downloadTheme = async function downloadShopifyTheme(id, options) {
     if (id) {
-        console.log(`Found theme with ID: ${id}, deploying...`);
+        console.log(`Found theme with ID: ${id}, deploying...`, themeDirPath);
         return await themeKit.command('download', {
         dir: themeDirPath,
         password: process.env.SHOPIFY_PASSWORD,
