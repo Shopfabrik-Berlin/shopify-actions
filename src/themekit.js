@@ -124,5 +124,6 @@ module.exports = {
   getThemes,
   getAssets,
   getIgnoredTemplates,
-  downloadTheme
+  downloadTheme,
+  deployThemeByName
 };

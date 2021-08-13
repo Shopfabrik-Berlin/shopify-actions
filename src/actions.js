@@ -23,7 +23,7 @@ async function preview(){
     const prID = await getPullRequestID()
     const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
     await createTheme(name)
-    await deployTheme(name)
+    await deployThemeByName(name)
 }
 
 
