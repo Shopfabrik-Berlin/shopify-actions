@@ -12,10 +12,9 @@ const {
 
 async function deploy(){
     const themeID = process.env.SHOPIFY_THEME_ID
-    const ignoreFiles = [...await getIgnoredTemplates(themeID), 'config/settings_data.json', 'locales/']
-    console.log("Ignored Files: ", ignoreFiles)
+    const ignoredFiles = [...await getIgnoredTemplates(themeID), 'config/settings_data.json', 'locales/']
     await deployTheme(themeID, {
-        ignoreFiles
+        ignoredFiles
     })
 }
 
@@ -25,7 +24,7 @@ async function preview(){
     const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
     await createTheme(name)
     await deployThemeByName(name, {
-        ignoreFiles: []
+        ignoredFiles: []
     })
 }
 
