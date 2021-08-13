@@ -2,7 +2,8 @@ const {
     deployTheme,
     createTheme,
     getIgnoredTemplates,
-    downloadTheme
+    downloadTheme,
+    deployThemeByName
   } = require('./themekit');
   const {
     getPullRequestID
