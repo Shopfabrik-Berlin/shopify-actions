@@ -47,6 +47,7 @@ const getAssets = async function getShopifyAssets(themeID, params) {
 const deployTheme = async function deployShopifyTheme(id, {ignoredFiles} = {}) {
     if (id) {
         console.log(`Found theme with ID: ${id}, deploying...`, themeDirPath);
+        console.log(`Files to ignore:`, ignoredFiles);
         return await themeKit.command('deploy', {
         dir: themeDirPath,
         nodelete: true,
