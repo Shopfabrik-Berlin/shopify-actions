@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: 12
     - name: Install dependencies
-      run: yarn install      
+      run: npm install      
     - name: Deploy preview theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
       env:
