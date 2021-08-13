@@ -56,6 +56,7 @@ const createGitHubComment = async (prID, message) => {
   };
 
   const getPullRequestID = async () => {
+    console.log()
     return  github.context.issue.number;
   };
 

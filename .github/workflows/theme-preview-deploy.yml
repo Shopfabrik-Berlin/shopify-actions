@@ -1,8 +1,8 @@
 name: Delete Shopify Theme Review
 
 on:
-pull_request:
-    types: [opened, synchronize]
+  pull_request:
+      types: [opened, synchronize]
 
 jobs:
   deploy:
@@ -27,4 +27,3 @@ jobs:
         SHOPIFY_PASSWORD: ${{ secrets.REVIEW_SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.REVIEW_SHOPIFY_STORE_URL }}
         TASK: 'PREVIEW'
-        
