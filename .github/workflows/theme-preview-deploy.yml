@@ -19,8 +19,8 @@ jobs:
     - name: Deploy preview theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
       env:
-        SHOPIFY_API_KEY: ${{ secrets.REVIEW_SHOPIFY_API_KEY }}
-        SHOPIFY_PASSWORD: ${{ secrets.REVIEW_SHOPIFY_PASSWORD }}
-        SHOPIFY_STORE_URL: ${{ secrets.REVIEW_SHOPIFY_STORE_URL }}
+        SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TASK: 'PREVIEW'
