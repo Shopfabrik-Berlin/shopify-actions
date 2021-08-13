@@ -82,7 +82,7 @@ const deployThemeByName = async function deployShopifyThemeByName(name) {
     const theme = await findTheme(name);
     if (theme) {
         console.log(`Found theme: ${theme.name}, with ID: ${theme.id}, deploying...`);
-       await deployShopifyTheme(theme.id)
+       await deployTheme(theme.id)
     } else {
         console.log(`Theme does not exists: ${name}...`)
     }
