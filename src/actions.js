@@ -3,11 +3,14 @@ const {
     createTheme,
     getIgnoredTemplates,
     downloadTheme,
-    deployThemeByName
+    deployThemeByName,
+    deleteTheme
   } = require('./themekit');
   const {
     getPullRequestID
   } = require('./github');
+
+  const PREVIEW_NAME = "⚠[PREVIEW] - Shopfabrik"
 
 
 async function deploy(){
@@ -21,7 +24,7 @@ async function deploy(){
 
 async function preview(){
     const prID = await getPullRequestID()
-    const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
+    const name = `${PREVIEW_NAME} #${prID}`
     await createTheme(name)
     await deployThemeByName(name, {
         ignoredFiles: []
@@ -31,7 +34,8 @@ async function preview(){
 
 async function previewDelete(){
     const prID = await getPullRequestID()
-    const name = `⚠[PREVIEW] - Shopfabrik #${prID}`
+    const name = `${PREVIEW_NAME} #${prID}`
+    await deleteTheme(name)
 }
 
 
