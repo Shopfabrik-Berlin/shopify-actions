@@ -44,7 +44,7 @@ const getAssets = async function getShopifyAssets(themeID, params) {
     return await shopify.asset.list(themeID, params);
 };
 
-const deployTheme = async function deployShopifyTheme(id, {ignoredFiles}) {
+const deployTheme = async function deployShopifyTheme(id, {ignoredFiles} = {}) {
     if (id) {
         console.log(`Found theme with ID: ${id}, deploying...`);
         return await themeKit.command('deploy', {
