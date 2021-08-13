@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Run themekit action
-node /src/index.js
+node /shopify-action/src/index.js
