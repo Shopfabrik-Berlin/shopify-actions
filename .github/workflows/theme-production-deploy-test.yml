@@ -1,8 +1,8 @@
 name: Staging - Theme Shopify deploy to Staging - Single Store
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*'
       
 concurrency: 
   group: staging_environment_theme
@@ -26,7 +26,7 @@ jobs:
         uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
         env:
           TASK: DEPLOY
-          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_STAGE_PASSWORD }}
-          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STAGE_STORE_URL }}
-          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_STAGE_THEME_ID }}
+          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PRODUCTION_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_PRODUCTION_STORE_URL }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_PRODUCTION_THEME_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
