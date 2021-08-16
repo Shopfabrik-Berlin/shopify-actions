@@ -29,7 +29,8 @@ const createGitHubDeployment = async (url) => {
 };
 
 const createGitHubComment = async (prID, message) => {
-  await octokit.issues.createComment({
+  console.log(octokit)
+  await octokit.rest.issues.createComment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: prID,
