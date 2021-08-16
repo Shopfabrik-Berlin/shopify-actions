@@ -4,19 +4,37 @@ const client = asana.Client.create({
     logAsanaChangeWarnings: false
   }).useAccessToken(process.env.ASANA_TOKEN);
 
+/**
+ * Will find a task by its task id
+ * @param {*} taskId 
+ * @returns 
+ */
 async function findIssue(taskId){
     return await client.tasks.findById(taskId);
 }
 
+/**
+ * Will create a comment in a task by task id
+ * @param {*} taskId 
+ * @param {*} taskComment 
+ * @returns 
+ */
 async function asanaComment(taskId, taskComment){
     return await client.tasks.addComment(taskId, {
         text: taskComment
     });
 }
 
+/**
+ * Will create a new issue in a specific project 
+ * @param {*} title 
+ * @param {*} prURL 
+ * @param {*} html 
+ * @returns 
+ */
 async function asanaCreateTicket(title, prURL, html){
     const data = { 
-        "assignee": "christian.orgs@shop-fabrik.net",
+        "assignee": process.env.ASANA_PR_ASSIGNEE,
         "completed": false,
         "html_notes": `<body><a href="${prURL}">${prURL}</a>${html}</body>`,
         "name": `PR: ${title}`,
@@ -25,8 +43,6 @@ async function asanaCreateTicket(title, prURL, html){
     }
     return await client.tasks.create(data);
 }
-
-
 
 
 

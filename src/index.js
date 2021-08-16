@@ -7,6 +7,12 @@ const {
   } = require('./actions');
 
 
+/**
+ * 
+ * Main run function 
+ * Will decide which TASK should run based on ENV from the workflow .yml
+ * 
+ */
 async function run() {
   try {
     const task = process.env.TASK;
