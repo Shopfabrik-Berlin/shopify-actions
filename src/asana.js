@@ -16,14 +16,12 @@ async function asanaComment(taskId, taskComment){
 
 async function asanaCreateTicket(title, prURL){
     const data = { 
-        "data": {
-            "assignee": "christian.orgs@shop-fabrik.net",
-            "completed": false,
-            "html_notes": `<body>${prURL}</body>`,
-            "name": `PR: ${title}`,
-            "projects": [process.env.ASANA_PR_PROJECT_ID],
-            "resource_subtype": "default_task"
-        }
+        "assignee": "christian.orgs@shop-fabrik.net",
+        "completed": false,
+        "html_notes": `<body>${prURL}</body>`,
+        "name": `PR: ${title}`,
+        "projects": [process.env.ASANA_PR_PROJECT_ID],
+        "resource_subtype": "default_task"
     }
     return await client.tasks.create(data);
 }
