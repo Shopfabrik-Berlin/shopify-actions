@@ -38,7 +38,7 @@ async function asanaCreateTicket(title, prURL, html){
         "completed": false,
         "html_notes": `<body><a href="${prURL}">${prURL}</a>${html}</body>`,
         "name": `PR: ${title}`,
-        "projects": [process.env.ASANA_PR_PROJECT_ID],
+        "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
         "resource_subtype": "default_task"
     }
     return await client.tasks.create(data);
