@@ -10,7 +10,7 @@ concurrency:
   
 jobs:
  deploy-shopify-theme:
-    name: Staging - Theme Deploy to Staging
+    name: Staging - Theme Deploy to Production
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
           node-version: 12
       - name: Install dependencies
         run: yarn install
-      - name: Staging - Deploy staging theme
+      - name: Production - Theme Deploy live theme
         uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
         env:
           TASK: DEPLOY
