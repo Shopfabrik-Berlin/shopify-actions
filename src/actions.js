@@ -44,7 +44,7 @@ async function preview(){
         ignoredFiles: ['templates/']
     })
     await deployThemeByName(name, {
-        ignoredFiles: []
+        ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
     })
     await createGitHubComment(prID, prComment)
     const prBody = await getPullRequestBody()

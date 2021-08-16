@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: yarn install      
     - name: Deploy preview theme
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+      uses: Shopfabrik-Berlin/shopify-actions@asana-actions
       env:
         TASK: PREVIEW
         SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}

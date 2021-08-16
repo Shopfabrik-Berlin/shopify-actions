@@ -33,7 +33,6 @@ const createGitHubDeployment = async (url) => {
 };
 
 const createGitHubComment = async (prID, message) => {
-  console.log(octokit)
   await octokit.rest.issues.createComment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -65,6 +64,7 @@ const createGitHubComment = async (prID, message) => {
   };
   
   const getPullRequestBody = async () => {
+    console.log(JSON.stringify(github.context))
     return github.context.payload.pull_request.body;
   };
 
