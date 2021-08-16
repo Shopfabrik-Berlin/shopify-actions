@@ -26,3 +26,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
         ASANA_PR_PROJECT_ID: ${{ secrets.ASANA_PR_PROJECT_ID }}
+        ASANA_PR_ASSIGNEE: ${{ secrets.ASANA_PR_PROJECT_ID }}

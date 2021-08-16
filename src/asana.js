@@ -34,7 +34,7 @@ async function asanaComment(taskId, taskComment){
  */
 async function asanaCreateTicket(title, prURL, html){
     const data = { 
-        "assignee": process.env.ASANA_PR_ASSIGNEE,
+        "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
         "completed": false,
         "html_notes": `<body><a href="${prURL}">${prURL}</a>${html}</body>`,
         "name": `PR: ${title}`,
