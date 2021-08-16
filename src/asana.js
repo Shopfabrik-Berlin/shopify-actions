@@ -32,11 +32,11 @@ async function asanaComment(taskId, taskComment){
  * @param {*} html 
  * @returns 
  */
-async function asanaCreateTicket(title, prURL, html){
+async function asanaCreateTicket(title, prURL, previewURL){
     const data = { 
         "assignee": `toni.meuschke@shop-fabrik.net`,
         "completed": false,
-        "html_notes": `<body><a href="${prURL}">${prURL}</a>\n${html}</body>`,
+        "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
         "name": `PR: ${title}`,
         "projects": ["1200085901584356"],
         "resource_subtype": "default_task"
