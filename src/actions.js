@@ -72,7 +72,7 @@ async function preview(){
             result.task, 
             `${prComment}\n Github Pull Request: ${prURL}`
         )
-        await asanaCreateTicket(repositoryName, prURL, `${prURL}`)
+        await asanaCreateTicket(repositoryName, prURL, `${prURL}<br/><br/>${prComment}`)
     }
 }
 
