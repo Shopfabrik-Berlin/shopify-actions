@@ -49,8 +49,11 @@ async function preview(){
     await createGitHubComment(prID, prComment)
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
+    console.log("prBody", prBody)
+    console.log("result", result)
     if(result && result.task && result.project){
         const prURL = await getPullRequestURL()
+        console.log("prURL", prURL)
         await asanaComment(
             result.task, 
             `${prComment}\n Github Pull Request: ${prURL}`
