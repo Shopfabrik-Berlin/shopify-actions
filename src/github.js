@@ -3,6 +3,10 @@ const github = require("@actions/github");
 const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 const commentIdentifier =
   "<!-- Comment by Shopify Theme Deploy Previews Action -->";
+const REGEX = new RegExp(
+  `https:\\/\\/app.asana.com\\/(\\d+)\\/(?<project>\\d+)\\/(?<task>\\d+)`,
+  'g'
+);
 
 const parsePullRequestId = (githubRef) => {
   const result = /refs\/pull\/(\d+)\/merge/g.exec(githubRef);
@@ -53,19 +57,37 @@ const createGitHubComment = async (prID, message) => {
 
 
   const getRef = async () => {
-    return  github.context.ref || process.env.GITHUB_REF;
+    return github.context.ref || process.env.GITHUB_REF;
   };
 
   const getPullRequestID = async () => {
-    return  github.context.issue.number;
+    return github.context.issue.number;
+  };
+  
+  const getPullRequestBody = async () => {
+    return github.context.payload.pull_request.body;
+  };
+
+  const getPullRequestURL = async () => {
+    return github.context.payload.pull_request.html_url;
   };
 
 
+  async function parseGithubPR(prBody){
+    const result = REGEX.exec(prBody)
+    if(result){
+        return result.groups
+    }
+    return null
+}
 
 
 module.exports = {
     getRef,
     getPullRequestID,
     createGitHubComment,
-    commentIdentifier
+    commentIdentifier,
+    getPullRequestBody,
+    parseGithubPR,
+    getPullRequestURL
 }

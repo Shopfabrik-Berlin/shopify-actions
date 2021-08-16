@@ -6,13 +6,20 @@ const {
     deployThemeByName,
     deleteTheme
   } = require('./themekit');
-  const {
+const {
     getPullRequestID,
     createGitHubComment,
-    commentIdentifier
+    commentIdentifier,
+    getPullRequestBody,
+    parseGithubPR,
+    getPullRequestURL
   } = require('./github');
-
-  const PREVIEW_NAME = "⚠[PREVIEW] - Shopfabrik"
+const {
+    asanaComment,
+    asanaCreateTicket
+  } = require('./asana');
+const asana = require('asana');
+const PREVIEW_NAME = "⚠[PREVIEW] - Shopfabrik"
 
 
 async function deploy(){
@@ -29,6 +36,8 @@ async function preview(){
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createTheme(name)
+    const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
+    const prComment =  `${commentIdentifier}\n🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
     await deployThemeByName(name, {
@@ -37,8 +46,17 @@ async function preview(){
     await deployThemeByName(name, {
         ignoredFiles: []
     })
-    const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
-    await createGitHubComment(prID, `${commentIdentifier}\n🚀 Deployed successfully to ${URL}`)
+    await createGitHubComment(prID, prComment)
+    const prBody = await getPullRequestBody()
+    const result = await parseGithubPR(prBody)
+    if(result && result.task && result.project){
+        const prURL = await getPullRequestURL()
+        await asanaComment(
+            result.task, 
+            `${prComment}\n Github Pull Request: ${prURL}`
+        )
+        await asanaCreateTicket("New PR", prURL)
+    }
 }
 
 

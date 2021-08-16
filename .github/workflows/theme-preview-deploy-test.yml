@@ -24,3 +24,5 @@ jobs:
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+        ASANA_PR_PROJECT_ID: ${{ secrets.ASANA_PR_PROJECT_ID }}
