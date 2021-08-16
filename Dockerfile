@@ -1,10 +1,7 @@
-FROM debian:stable-20210721-slim
+FROM python:2.7-alpine
 
-RUN apt-get update && \
-    apt-get install -y curl python && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN curl -s https://shopify.github.io/themekit/scripts/install.py | python
+RUN apk add --update curl
+RUN curl -s https://shopify.dev/themekit.py | sudo python
 
 COPY "entrypoint.sh" "/entrypoint.sh"
 RUN chmod +x /entrypoint.sh
