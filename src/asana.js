@@ -25,8 +25,7 @@ async function asanaCreateTicket(title, prURL){
             "resource_subtype": "default_task"
         }
     }
-
-    
+    return await client.tasks.create(data);
 }
 
 
