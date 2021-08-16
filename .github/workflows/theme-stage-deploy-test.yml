@@ -1,0 +1,32 @@
+name: Staging - Theme Shopify deploy to Staging - Single Store
+on:
+  push:
+    branches:
+      - development
+      
+concurrency: 
+  group: staging_environment_theme
+  cancel-in-progress: true
+  
+jobs:
+ deploy-shopify-theme:
+    name: Staging - Theme Deploy to Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: development
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - name: Install dependencies
+        run: yarn install
+      - name: Staging - Deploy staging theme
+        uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+        env:
+          TASK: DEPLOY
+          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_STAGE_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STAGE_STORE_URL }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_STAGE_THEME_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,7 +2,7 @@ name: Delete Shopify Theme Review Test
 
 on:
   pull_request:
-      types: [opened, synchronize]
+      types: [closed]
 
 jobs:
   deploy:
@@ -16,11 +16,11 @@ jobs:
         node-version: 12
     - name: Install dependencies
       run: yarn install      
-    - name: Deploy preview theme
+    - name: Delete preview theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
       env:
-        TASK: PREVIEW
         SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TASK: PREVIEW_DELETE
