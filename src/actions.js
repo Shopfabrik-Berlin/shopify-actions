@@ -7,7 +7,9 @@ const {
     deleteTheme
   } = require('./themekit');
   const {
-    getPullRequestID
+    getPullRequestID,
+    createGitHubComment,
+    commentIdentifier
   } = require('./github');
 
   const PREVIEW_NAME = "⚠[PREVIEW] - Shopfabrik"
@@ -25,7 +27,8 @@ async function deploy(){
 async function preview(){
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
-    await createTheme(name)
+    const storeURL = process.env.SHOPIFY_STORE_URL
+    const theme = await createTheme(name)
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
     await deployThemeByName(name, {
@@ -34,6 +37,8 @@ async function preview(){
     await deployThemeByName(name, {
         ignoredFiles: []
     })
+    const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
+    await createGitHubComment(prID, `${commentIdentifier}\n🚀 Deployed successfully to ${URL}`)
 }
 
 

@@ -64,5 +64,7 @@ const createGitHubComment = async (prID, message) => {
 
 module.exports = {
     getRef,
-    getPullRequestID
+    getPullRequestID,
+    createGitHubComment,
+    commentIdentifier
 }

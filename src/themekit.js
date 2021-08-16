@@ -23,11 +23,12 @@ const deleteTheme = async function deleteShopifyThemes(name) {
 const createTheme = async function createShopifyTheme(name) {
     const theme = await findTheme(name);
     if (!theme) {
-      await shopify.theme.create({
+      return await shopify.theme.create({
           name
       });
     } else{
         console.log(`Found theme: ${name} with ID: ${theme.id} ...`);
+        return theme
     }
   };
 
