@@ -73,6 +73,12 @@ const createGitHubComment = async (prID, message) => {
   };
 
 
+  const getRepositoryName = async () => {
+    return github.context.payload.repository.name;
+  };
+  
+
+
   async function parseGithubPR(prBody){
     const result = REGEX.exec(prBody)
     if(result){
@@ -89,5 +95,6 @@ module.exports = {
     commentIdentifier,
     getPullRequestBody,
     parseGithubPR,
-    getPullRequestURL
+    getPullRequestURL,
+    getRepositoryName
 }

@@ -18,7 +18,7 @@ async function asanaCreateTicket(title, prURL){
     const data = { 
         "assignee": "christian.orgs@shop-fabrik.net",
         "completed": false,
-        "html_notes": `<body>${prURL}</body>`,
+        "html_notes": `<body><a href="${prURL}">${prURL}</a></body>`,
         "name": `PR: ${title}`,
         "projects": [process.env.ASANA_PR_PROJECT_ID],
         "resource_subtype": "default_task"

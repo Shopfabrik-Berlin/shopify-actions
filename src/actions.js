@@ -12,7 +12,8 @@ const {
     commentIdentifier,
     getPullRequestBody,
     parseGithubPR,
-    getPullRequestURL
+    getPullRequestURL,
+    getRepositoryName
   } = require('./github');
 const {
     asanaComment,
@@ -53,12 +54,13 @@ async function preview(){
     console.log("result", result)
     if(result && result.task && result.project){
         const prURL = await getPullRequestURL()
+        const repositoryName = await getRepositoryName()
         console.log("prURL", prURL)
         await asanaComment(
             result.task, 
             `${prComment}\n Github Pull Request: ${prURL}`
         )
-        await asanaCreateTicket("New PR", prURL)
+        await asanaCreateTicket(repositoryName, prURL)
     }
 }
 
