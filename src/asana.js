@@ -33,7 +33,8 @@ async function asanaComment(taskId, taskComment){
  * @returns 
  */
 async function asanaCreateTicket(title, prURL, html){
-
+    const assignee = process.env.ASANA_PR_ASSIGNEE
+    console.log(assignee)
     const data = { 
         "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
         "completed": false,
