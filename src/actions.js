@@ -53,7 +53,7 @@ async function preview(){
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createTheme(name)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
-    const prComment =  `${commentIdentifier}\n🚀 Deployed successfully to ${URL}`
+    const prComment =  `🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
     await deployThemeByName(name, {
