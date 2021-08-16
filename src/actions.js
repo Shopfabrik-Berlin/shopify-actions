@@ -26,6 +26,11 @@ async function preview(){
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
     await createTheme(name)
+    // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
+    // first we need to deploy all sections + snippets and then the template files
+    await deployThemeByName(name, {
+        ignoredFiles: ['templates/']
+    })
     await deployThemeByName(name, {
         ignoredFiles: []
     })
