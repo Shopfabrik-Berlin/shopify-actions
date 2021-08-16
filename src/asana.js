@@ -37,9 +37,9 @@ async function asanaCreateTicket(title, prURL, html){
     const data = { 
         "assignee": "toni.meuschke@shop-fabrik.net",
         "completed": false,
-        "html_notes": `<body><a href="${prURL}">${prURL}</a>${html}</body>`,
+        "html_notes": `<body><a href="${prURL}">${prURL}</a></body>`,
         "name": `PR: ${title}`,
-        "projects": ["1200795729134630"],
+        "projects": ["1200085901584356"],
         "resource_subtype": "default_task"
     }
     console.log(JSON.stringify(data))
