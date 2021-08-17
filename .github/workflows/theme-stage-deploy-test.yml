@@ -1,4 +1,4 @@
-name: Staging - Theme Shopify deploy to Staging - Single Store
+name: Stage - Deploy Theme Shopify Test
 on:
   push:
     branches:

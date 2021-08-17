@@ -1,4 +1,4 @@
-name: Production - Theme Shopify backup
+name: Production - Backup Theme Shopify Test
 on:
   schedule:
     - cron: "0 9 * * *"

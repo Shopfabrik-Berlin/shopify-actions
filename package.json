@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest test/actions.test.js --setupFiles dotenv/config",
+    "test": "jest test/themekit.test.js --setupFiles dotenv/config",
     "build": "ncc build src/index.js -o dist"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "@shopify/themekit": "^1.1.9",
     "@vercel/ncc": "^0.29.0",
     "asana": "^0.18.6",
+    "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "shopify-api-node": "^3.6.14"
   },

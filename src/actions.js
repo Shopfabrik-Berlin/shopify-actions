@@ -19,7 +19,6 @@ const {
     asanaComment,
     asanaCreateTicket
   } = require('./asana');
-const asana = require('asana');
 const PREVIEW_NAME = "⚠[PREVIEW] - Shopfabrik"
 
 
@@ -51,7 +50,7 @@ async function preview(){
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
-    const theme = await createTheme(name)
+    const theme = await createShopifyTheme(name)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
     const prComment =  `🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty

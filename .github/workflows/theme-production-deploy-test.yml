@@ -1,16 +1,12 @@
-name: Staging - Theme Shopify deploy to Staging - Single Store
+name: Production - Deploy Theme Shopify Test
 on:
   push:
     tags:
       - 'v*'
-      
-concurrency: 
-  group: staging_environment_theme
-  cancel-in-progress: true
-  
+    
 jobs:
  deploy-shopify-theme:
-    name: Staging - Theme Deploy to Production
+    name: Production - Theme Deploy to Production
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
