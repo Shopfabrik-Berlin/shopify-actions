@@ -27,3 +27,4 @@ jobs:
         ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
         ASANA_PR_PROJECT_ID: ${{ secrets.ASANA_PR_PROJECT_ID }}
         ASANA_PR_ASSIGNEE: ${{ secrets.ASANA_PR_PROJECT_ID }}
+        SHOPIFY_THEME_DIR_PATH: test/theme
