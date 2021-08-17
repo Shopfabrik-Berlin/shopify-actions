@@ -1,11 +1,9 @@
-const Shopify = require('shopify-api-node');
+const axios = require('axios');
 const themeKit = require('@shopify/themekit');
-const { getOctokitOptions } = require('@actions/github/lib/utils');
 
-const shopify = new Shopify({
-  shopName: process.env.SHOPIFY_STORE_URL,
-  apiKey: process.env.SHOPIFY_API_KEY,
-  password: process.env.SHOPIFY_PASSWORD,
+const shopify = axios.create({
+  baseURL: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2021-07`,
+  headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}`}
 });
 let themeDirPath = process.env.SHOPIFY_THEME_DIR_PATH
 
@@ -24,7 +22,17 @@ const deleteTheme = async function deleteShopifyThemes(name) {
   const theme = await findTheme(name);
   if (theme) {
     console.log(`Found theme: ${name} with ID: ${theme.id}, deleting...`);
-    await shopify.theme.delete(theme.id);
+    const response = await shopify.delete(`/themes/${theme.id}.json`, {
+      theme: {
+        name
+      }
+    })
+    if(response.status === 200){
+      return response.data.theme
+    } else {
+      console.log(response)
+      throw new Error(`Couldn't delete theme: ${name}.`)
+    }
   } else{
     console.log(`Couldn't find theme: ${name}.`);
   }
@@ -38,9 +46,17 @@ const deleteTheme = async function deleteShopifyThemes(name) {
 const createTheme = async function createShopifyTheme(name) {
     const theme = await findTheme(name);
     if (!theme) {
-      return await shopify.theme.create({
+      const response = await shopify.post('/themes.json', {
+        theme: {
           name
-      });
+        }
+      })
+      if(response.status === 201){
+        return response.data.theme
+      } else {
+        console.log(response)
+        throw new Error(`Couldn't create theme: ${name}...`)
+      }
     } else{
         console.log(`Found theme: ${name} with ID: ${theme.id} ...`);
         return theme
@@ -63,8 +79,10 @@ const findTheme = async function findShopifyTheme(name) {
  * @returns 
  */
 const getThemes = async function getShopifyThemes(name) {
-  return await shopify.theme.list();
+  const response = await shopify.get('/themes.json')
+  return response.data.themes
 };
+
 
 /**
  * Will get assests from a specific theme 
@@ -72,8 +90,10 @@ const getThemes = async function getShopifyThemes(name) {
  * @param {*} params 
  * @returns 
  */
-const getAssets = async function getShopifyAssets(themeID, params) {
-    return await shopify.asset.list(themeID, params);
+const getAssets = async function getShopifyAssets(themeID, params = '') {
+    console.log(`/themes/${themeID}/assets.json?${params}`)
+    const response = await shopify.get(`/themes/${themeID}/assets.json?${params}`)
+    return response.data.assets
 };
 
 /**
