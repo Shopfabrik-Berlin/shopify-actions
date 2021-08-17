@@ -34,11 +34,11 @@ async function asanaComment(taskId, taskComment){
  */
 async function asanaCreateTicket(title, prURL, previewURL){
     const data = { 
-        "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
+        "assignee": `toni.meuschke@shop-fabrik.net`,
         "completed": false,
         "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
         "name": `PR: ${title}`,
-        "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
+        "projects": ["1200085901584356"],
         "resource_subtype": "default_task"
     }
     return await client.tasks.create(data);
