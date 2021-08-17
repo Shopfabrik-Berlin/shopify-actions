@@ -17,10 +17,14 @@ jobs:
     - name: Install dependencies
       run: yarn install      
     - name: Deploy preview theme
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+      uses: Shopfabrik-Berlin/shopify-actions@asana-actions
       env:
         TASK: PREVIEW
         SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+        ASANA_PR_PROJECT_ID: ${{ secrets.ASANA_PR_PROJECT_ID }}
+        ASANA_PR_ASSIGNEE: ${{ secrets.ASANA_PR_PROJECT_ID }}
+        SHOPIFY_THEME_DIR_PATH: test/theme

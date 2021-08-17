@@ -3,13 +3,10 @@ const github = require("@actions/github");
 const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 const commentIdentifier =
   "<!-- Comment by Shopify Theme Deploy Previews Action -->";
-
-const parsePullRequestId = (githubRef) => {
-  const result = /refs\/pull\/(\d+)\/merge/g.exec(githubRef);
-  if (!result) throw new Error("Reference not found.");
-  const [, pullRequestId] = result;
-  return pullRequestId;
-};
+const REGEX = new RegExp(
+  `https:\\/\\/app.asana.com\\/(\\d+)\\/(?<project>\\d+)\\/(?<task>\\d+)`,
+  'g'
+);
 
 const createGitHubDeployment = async (url) => {
   const deployment = await octokit.repos.createDeployment({
@@ -28,8 +25,13 @@ const createGitHubDeployment = async (url) => {
   });
 };
 
+
+/**
+ * Will create a Github Comment on a Pull Request
+ * @param {*} prID 
+ * @param {*} message 
+ */
 const createGitHubComment = async (prID, message) => {
-  console.log(octokit)
   await octokit.rest.issues.createComment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -38,34 +40,59 @@ const createGitHubComment = async (prID, message) => {
   });
 };
 
-  const findIssueComment = async (prID) => {
-    const listRes = await octokit.issues.listComments({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      issue_number: prID,
-    });
-    const comments = listRes.data;
-    for (const comment of comments) {
-      if (comment.body.includes(commentIdentifier)) return comment.id;
-    }
-    return undefined;
-  };
+/**
+ * Will return the Pull Request ID (without #)
+ * @returns
+ */
+const getPullRequestID = async () => {
+  return github.context.issue.number;
+};
 
+/**
+ * Will return the Pull Request body 
+ * @returns
+ */
+const getPullRequestBody = async () => {
+  return github.context.payload.pull_request.body;
+};
 
-  const getRef = async () => {
-    return  github.context.ref || process.env.GITHUB_REF;
-  };
+/**
+ * Will return the Pull Request URL 
+ * @returns
+ */
+const getPullRequestURL = async () => {
+  return github.context.payload.pull_request.html_url;
+};
 
-  const getPullRequestID = async () => {
-    return  github.context.issue.number;
-  };
+/**
+ * Will return the repository name 
+ * @returns
+ */
+const getRepositoryName = async () => {
+  return github.context.payload.repository.name;
+};
+  
 
-
+/**
+ * Will parse the Asana URL from a Pull Request body
+ * @param {*} prBody 
+ * @returns 
+ */
+async function parseGithubPR(prBody){
+  const result = REGEX.exec(prBody)
+  if(result){
+      return result.groups
+  }
+  return null
+}
 
 
 module.exports = {
-    getRef,
     getPullRequestID,
     createGitHubComment,
-    commentIdentifier
+    commentIdentifier,
+    getPullRequestBody,
+    parseGithubPR,
+    getPullRequestURL,
+    getRepositoryName
 }
