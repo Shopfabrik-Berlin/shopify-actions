@@ -1,4 +1,4 @@
-name: Delete Shopify Theme Review Test
+name: Preview - Deploy Shopify Theme Test
 
 on:
   pull_request:
