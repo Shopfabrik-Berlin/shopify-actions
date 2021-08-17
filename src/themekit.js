@@ -7,7 +7,12 @@ const shopify = new Shopify({
   apiKey: process.env.SHOPIFY_API_KEY,
   password: process.env.SHOPIFY_PASSWORD,
 });
-const themeDirPath = process.env.SHOPIFY_THEME_DIR_PATH || 'test/theme';
+let themeDirPath = process.env.SHOPIFY_THEME_DIR_PATH
+
+if(!themeDirPath){
+  themeDirPath = "."
+}
+
 
 
 /**
