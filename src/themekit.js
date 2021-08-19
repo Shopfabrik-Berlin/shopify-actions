@@ -184,7 +184,7 @@ const updateTheme = async function updateShopifyTheme(name) {
  * @returns 
  */
 async function getIgnoredTemplates(themeId) {
-   const files = await getAssets(themeId, {'asset[content_type]': 'application/json'})
+   const files = await getAssets(themeId, 'asset[content_type]=application/json')
    const ignoredFiles = []
    files.forEach((file) => {
         if(file.key.search('templates/*') !== -1){
