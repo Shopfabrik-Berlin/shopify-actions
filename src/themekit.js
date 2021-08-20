@@ -111,6 +111,7 @@ const deployTheme = async function deployShopifyTheme(id, {ignoredFiles} = {}) {
         nodelete: true,
         password: process.env.SHOPIFY_PASSWORD,
         store: process.env.SHOPIFY_STORE_URL,
+        allowLive: true,
         themeid: id,
         timeout: '120s',
         ignoredFiles: ignoredFiles || ['config/settings_data.json', 'locales/', 'templates/*.json']
