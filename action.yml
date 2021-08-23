@@ -10,7 +10,7 @@ branding:
 outputs:
   theme-id:
     description: 'Theme ID'
-  theme-id:
+  theme-name:
     description: 'Theme Name'
   preview-url:
     description: 'Theme preview URL'
