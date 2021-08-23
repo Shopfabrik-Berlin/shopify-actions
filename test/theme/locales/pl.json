@@ -47,14 +47,15 @@
       "copy_to_clipboard": "Kopiuj link",
       "share": "Udostępnij",
       "share_url": "Link",
-      "success_message": "Link skopiowany do schowka!"
+      "success_message": "Link skopiowany do schowka",
+      "close": "Zamknij udostępnienie"
     }
   },
   "date_formats": {
     "month_year": "%B %Y"
   },
   "newsletter": {
-    "label": "Twój adres e-mail",
+    "label": "E-mail",
     "success": "Dziękujemy za subskrypcję",
     "button_label": "Subskrybuj"
   },
@@ -141,7 +142,8 @@
         "open_media": "Otwórz multimedia {{ index }} w widoku galerii",
         "play_model": "Uruchom przeglądarkę 3D",
         "play_video": "Odtwórz film"
-      }
+      },
+      "view_full_details": "Pokaż kompletne dane"
     },
     "modal": {
       "label": "Galeria multimediów"
@@ -197,7 +199,7 @@
       "new_subtotal": "Nowa suma częściowa",
       "note": "Specjalne instrukcje do zamówienia",
       "checkout": "Realizuj zakup",
-      "empty": "Twój koszyk jest pusty.",
+      "empty": "Twój koszyk jest pusty",
       "cart_error": "Wystąpił błąd podczas aktualizowania Twojego koszyka. Spróbuj ponownie.",
       "cart_quantity_error_html": "Do koszyka dodać możesz tylko [quantity] sztuk(i) tej pozycji.",
       "taxes_and_shipping_policy_at_checkout_html": "Podatki i koszty <a href=\"{{ link }}\">wysyłki</a> obliczane przy realizacji zakupu",

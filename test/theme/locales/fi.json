@@ -47,14 +47,15 @@
       "copy_to_clipboard": "Kopioi linkki",
       "share": "Jaa",
       "share_url": "Linkki",
-      "success_message": "Linkki kopioitu leikepöydälle!"
+      "success_message": "Linkki kopioitu leikepöydälle",
+      "close": "Sulje jakaminen"
     }
   },
   "date_formats": {
     "month_year": "%B %Y"
   },
   "newsletter": {
-    "label": "Sähköpostiosoitteesi",
+    "label": "Sähköposti",
     "success": "Kiitos tilauksesta",
     "button_label": "Tilaa"
   },
@@ -139,7 +140,8 @@
         "open_media": "Avaa aineisto {{ index }} gallerianäkymässä",
         "play_model": "Toista 3D Viewer",
         "play_video": "Toista video"
-      }
+      },
+      "view_full_details": "Näytä kaikki tiedot"
     },
     "modal": {
       "label": "Mediagalleria"
@@ -191,7 +193,7 @@
       "new_subtotal": "Uusi välisumma",
       "note": "Tilauksen erityisohjeet",
       "checkout": "Maksu kassalle",
-      "empty": "Ostoskorisi on tyhjä.",
+      "empty": "Ostoskorisi on tyhjä",
       "cart_error": "Ostoskorisi päivityksessä tapahtui virhe. Yritä uudelleen.",
       "cart_quantity_error_html": "Voit lisätä ostoskoriisi vain [määrä] kappaletta tätä tuotetta.",
       "taxes_and_shipping_policy_at_checkout_html": "Verot ja <a href=\"{{ link }}\">toimituskulut</a> lasketaan kassalla",

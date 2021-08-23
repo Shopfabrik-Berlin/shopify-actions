@@ -1,22 +1,33 @@
 {
   "name": "shopify-actions",
   "version": "1.0.0",
-  "description": "",
+  "description": "Github Actions to deploy, preview and backup a shopify theme",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest test/themekit.test.js --setupFiles dotenv/config",
-    "build": "ncc build src/index.js -o dist"
+    "test": "jest actions.test.js --setupFiles dotenv/config",
+    "test_coverage": "jest --coverage --setupFiles dotenv/config"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shopfabrik-Berlin/shopify-actions.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "keywords": [
+    "shopify",
+    "github",
+    "action",
+    "theme",
+    "deploy",
+    "pull request"
+  ],
   "bugs": {
     "url": "https://github.com/Shopfabrik-Berlin/shopify-actions/issues"
   },
   "homepage": "https://github.com/Shopfabrik-Berlin/shopify-actions#readme",
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "@actions/core": "^1.4.0",
     "@actions/github": "^5.0.0",

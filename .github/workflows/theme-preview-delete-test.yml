@@ -12,7 +12,6 @@ jobs:
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
       env:
         TASK: PREVIEW_DELETE
-        SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

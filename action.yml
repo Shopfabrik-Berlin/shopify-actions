@@ -1,14 +1,16 @@
-name: 'Get Shopify theme'
-author: 'Christian'
-description: 'Get Shopify theme with Theme Kit'
+name: 'Shopify Theme Actions'
+author: 'Toni Meuschke'
+description: 'Github Actions to deploy, preview and backup a shopify theme'
 runs:
   using: 'docker'
   image: 'Dockerfile'
 branding:
-  icon: 'shopping-bag'
+  icon: 'shopping-cart'
   color: 'green'
 outputs:
   theme-id:
-    description: 'Deployed theme id'
-  deploy-url:
-    description: 'The deploy URL'
+    description: 'Theme ID'
+  theme-id:
+    description: 'Theme Name'
+  preview-url:
+    description: 'Theme preview URL'

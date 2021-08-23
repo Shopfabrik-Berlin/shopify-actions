@@ -10,17 +10,13 @@ jobs:
     steps:
     - name: Check out Git repository
       uses: actions/checkout@v2
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 12
-    - name: Install dependencies
-      run: yarn install      
+
+    # ... steps to build Shopify theme ...
+
     - name: Deploy preview theme
       uses: Shopfabrik-Berlin/shopify-actions@asana-actions
       env:
         TASK: PREVIEW
-        SHOPIFY_API_KEY: ${{ secrets.SHOPIFY_API_KEY }}
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

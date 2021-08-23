@@ -1,4 +1,3 @@
-const core = require("@actions/core");
 const github = require("@actions/github");
 const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 const commentIdentifier =
@@ -8,7 +7,7 @@ const REGEX = new RegExp(
   'g'
 );
 
-const createGitHubDeployment = async (url) => {
+async function createGitHubDeployment(url) {
   const deployment = await octokit.repos.createDeployment({
     auto_merge: false,
     owner: github.context.repo.owner,
@@ -31,7 +30,7 @@ const createGitHubDeployment = async (url) => {
  * @param {*} prID 
  * @param {*} message 
  */
-const createGitHubComment = async (prID, message) => {
+async function createGitHubComment(prID, message) {
   await octokit.rest.issues.createComment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -44,7 +43,7 @@ const createGitHubComment = async (prID, message) => {
  * Will return the Pull Request ID (without #)
  * @returns
  */
-const getPullRequestID = async () => {
+async function getPullRequestID() {
   return github.context.issue.number;
 };
 
@@ -52,7 +51,7 @@ const getPullRequestID = async () => {
  * Will return the Pull Request body 
  * @returns
  */
-const getPullRequestBody = async () => {
+async function getPullRequestBody() {
   return github.context.payload.pull_request.body;
 };
 
@@ -60,7 +59,7 @@ const getPullRequestBody = async () => {
  * Will return the Pull Request URL 
  * @returns
  */
-const getPullRequestURL = async () => {
+async function getPullRequestURL() {
   return github.context.payload.pull_request.html_url;
 };
 
@@ -68,7 +67,7 @@ const getPullRequestURL = async () => {
  * Will return the repository name 
  * @returns
  */
-const getRepositoryName = async () => {
+async function getRepositoryName() {
   return github.context.payload.repository.name;
 };
   
@@ -81,7 +80,7 @@ const getRepositoryName = async () => {
 async function parseGithubPR(prBody){
   const result = REGEX.exec(prBody)
   if(result){
-      return result.groups
+    return result.groups
   }
   return null
 }
