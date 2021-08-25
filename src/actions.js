@@ -34,8 +34,7 @@ async function deploy(){
     const ignoredFiles = [
         ...await getIgnoredTemplates(themeID),
         'config/settings_data.json',
-        'locales/*',
-        'templates/*.json'
+        'locales/*'
     ]
     await deployShopifyTheme(themeID, {
         ignoredFiles
