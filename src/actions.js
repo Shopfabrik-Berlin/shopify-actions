@@ -80,11 +80,13 @@ async function preview(){
             `${prComment}\n Github Pull Request: ${prURL}`
         )
         // Check if ticket already exists
-        console.log('prURL:', prURL)
-        const existingTicket = await asanaGetTicket(prURL);
+        console.log('prID:', prID)
+        const existingTicket = await asanaGetTicket(prID);
         console.log('existing ticket:', existingTicket);
+        if (existingTicket == null) {
+            await asanaCreateTicket(repositoryName, prURL, URL, prID)
+        }
         
-        await asanaCreateTicket(repositoryName, prURL, URL)
         
     }
 }

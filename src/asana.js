@@ -30,16 +30,17 @@ async function asanaComment(taskId, taskComment){
  * @param {*} title 
  * @param {*} prURL 
  * @param {*} html 
+ * @param {*} prID
  * @returns 
  */
-async function asanaCreateTicket(title, prURL, previewURL){
+async function asanaCreateTicket(title, prURL, previewURL, prID){
     const data = { 
         "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
         "completed": false,
         "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
         "name": `PR: ${title}`,
         "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
-        "tags": [`PR: ${prURL}`],
+        "tags": [`PR:${prID}`],
         "resource_subtype": "default_task"
     }
     return await client.tasks.create(data);
@@ -48,17 +49,16 @@ async function asanaCreateTicket(title, prURL, previewURL){
 
 /**
  * Check if ticket is exsiting
- * @param {*} taskTag 
+ * @param {*} prID 
  * @returns 
  */
-async function asanaGetTicket(prURL){
-    const tag = `PR: ${prURL}`
+async function asanaGetTicket(prID){
+    const tag = `PR:${prID}`
     try {
         return await client.tasks.getTasksForTag(tag);
       } catch {
         return null
       }
-    
 }
 
 
