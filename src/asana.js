@@ -45,10 +45,20 @@ async function asanaCreateTicket(title, prURL, previewURL){
 }
 
 
+/**
+ * Check if ticket is exsiting
+ * @param {*} taskId 
+ * @returns 
+ */
+async function asanaGetTicket(taskId){
+    return await client.tasks.getTask(taskId);
+}
+
 
 module.exports = {
     asanaComment,
-    asanaCreateTicket
+    asanaCreateTicket,
+    asanaGetTicket
 }
 
 

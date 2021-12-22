@@ -17,7 +17,8 @@ const {
   } = require('./github');
 const {
     asanaComment,
-    asanaCreateTicket
+    asanaCreateTicket,
+    asanaGetTicket
   } = require('./asana');
 const PREVIEW_NAME = process.env.SHOPIFY_PREVIEW_NAME || "⚠[PREVIEW] - Shopfabrik"
 
@@ -60,6 +61,8 @@ async function preview(){
     const prComment =  `🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
+
+    // Do no deploy if label contains 'X'
     await deployShopifyThemeByName(name, {
         ignoredFiles: ['templates/']
     })
@@ -76,7 +79,12 @@ async function preview(){
             result.task, 
             `${prComment}\n Github Pull Request: ${prURL}`
         )
+        // Check if ticket already exists
+        const existingTicket = await asanaGetTicket(result.task);
+        console.log('existing ticket:', existingTicket);
+        
         await asanaCreateTicket(repositoryName, prURL, URL)
+        
     }
 }
 
