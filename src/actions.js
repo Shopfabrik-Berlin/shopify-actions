@@ -81,11 +81,12 @@ async function preview(){
         )
         // Check if ticket already exists
         console.log('prID:', prID)
-        const existingTicket = await asanaGetTicket(prID);
+        const existingTicket = await asanaGetTicket(repositoryName, prID);
         console.log('existing ticket:', existingTicket);
-        if (existingTicket == null) {
-            await asanaCreateTicket(repositoryName, prURL, URL, prID)
-        }
+        // if (existingTicket == null) {
+        //     await asanaCreateTicket(repositoryName, prURL, URL, prID)
+        // }
+        await asanaCreateTicket(repositoryName, prURL, URL, prID)
         
         
     }

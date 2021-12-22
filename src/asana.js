@@ -38,7 +38,7 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
         "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
         "completed": false,
         "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
-        "name": `PR: ${title}`,
+        "name": `PR: ${title} - ${prID}`,
         "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
         "resource_subtype": "default_task"
     }
@@ -48,13 +48,19 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
 
 /**
  * Check if ticket is exsiting
- * @param {*} prID 
+ * @param {*} title 
+ * @param {*} prID
  * @returns 
  */
-async function asanaGetTicket(prID){
-    // const tag = `PR:${prID}`
+async function asanaGetTicket(title, prID){
+    const nameToSearch = `PR: ${title} - ${prID}`,
     try {
-        return await client.tasks.getTasksForProject(process.env.ASANA_PR_PROJECT_ID, {});
+        const tasks = await client.tasks.getTasksForProject(process.env.ASANA_PR_PROJECT_ID, {
+            opt_fields: ["name"]
+        });
+        console.log('tasks', tasks);
+        console.log('nameToSearchL', nameToSearch)
+        return tasks.data.find(task => task.name === nameToSearch);
       } catch {
         return null
       }
