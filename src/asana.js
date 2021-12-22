@@ -55,8 +55,7 @@ async function asanaGetTicket(prURL){
     const tag = `PR: ${prURL}`
     try {
         return await client.tasks.getTasksForTag(tag);
-      } catch (error) {
-        console.error('error:', error);
+      } catch {
         return null
       }
     
