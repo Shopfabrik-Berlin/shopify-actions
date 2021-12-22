@@ -40,7 +40,6 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
         "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
         "name": `PR: ${title}`,
         "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
-        "tags": [`PR:${prID}`],
         "resource_subtype": "default_task"
     }
     return await client.tasks.create(data);
@@ -53,9 +52,9 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
  * @returns 
  */
 async function asanaGetTicket(prID){
-    const tag = `PR:${prID}`
+    // const tag = `PR:${prID}`
     try {
-        return await client.tasks.getTasksForTag(tag);
+        return await client.tasks.getTasksForProject(process.env.ASANA_PR_PROJECT_ID, {});
       } catch {
         return null
       }
