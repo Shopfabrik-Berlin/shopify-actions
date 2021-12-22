@@ -53,7 +53,13 @@ async function asanaCreateTicket(title, prURL, previewURL){
  */
 async function asanaGetTicket(prURL){
     const tag = `PR: ${prURL}`
-    return await client.tasks.getTasksForTag(tag);
+    try {
+        return await client.tasks.getTasksForTag(tag);
+      } catch (error) {
+        console.error('error:', error);
+        return null
+      }
+    
 }
 
 
