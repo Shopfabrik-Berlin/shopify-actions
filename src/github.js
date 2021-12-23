@@ -44,6 +44,7 @@ async function createGitHubComment(prID, message) {
  * @returns
  */
 async function getPullRequestID() {
+  console.log('github context payload:', github.context.payload.pull_request)
   return github.context.issue.number;
 };
 
@@ -62,6 +63,10 @@ async function getPullRequestBody() {
 async function getPullRequestURL() {
   return github.context.payload.pull_request.html_url;
 };
+
+
+// Create getPullRequestLabel
+// If label containts 'X' do not deploy preview
 
 /**
  * Will return the repository name 
