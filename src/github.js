@@ -7,6 +7,8 @@ const REGEX = new RegExp(
   'g'
 );
 
+const labelToNotMerge = "No Preview";
+
 async function createGitHubDeployment(url) {
   const deployment = await octokit.repos.createDeployment({
     auto_merge: false,
@@ -44,7 +46,7 @@ async function createGitHubComment(prID, message) {
  * @returns
  */
 async function getPullRequestID() {
-  console.log('github context payload:', github.context.payload.pull_request)
+  
   return github.context.issue.number;
 };
 
@@ -65,8 +67,20 @@ async function getPullRequestURL() {
 };
 
 
-// Create getPullRequestLabel
-// If label containts 'X' do not deploy preview
+/**
+ * Will return if Pull Request label is compared
+ * @returns
+ */
+ async function getPullRequestLabel() {
+  console.log('github context payload.labels:', github.context.payload.pull_request.labels)
+  
+  const pullRequestLabels = github.context.payload.pull_request.labels;
+  if (!!pullRequestLabels.length) {
+    return pullRequestLabels.find(label => label.name.toLowerCase() === labelToNotMerge.toLowerCase());
+  } else {
+    return null;
+  }
+};
 
 /**
  * Will return the repository name 
@@ -98,5 +112,6 @@ module.exports = {
     getPullRequestBody,
     parseGithubPR,
     getPullRequestURL,
+    getPullRequestLabel,
     getRepositoryName
 }

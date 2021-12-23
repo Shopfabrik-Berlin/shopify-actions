@@ -13,6 +13,7 @@ const {
     getPullRequestBody,
     parseGithubPR,
     getPullRequestURL,
+    getPullRequestLabel,
     getRepositoryName
   } = require('./github');
 const {
@@ -63,6 +64,9 @@ async function preview(){
     // first we need to deploy all sections + snippets and then the template files
 
     // Do no deploy if label contains 'X'
+    const labels = await getPullRequestLabel();
+    console.log('labels:', labels)
+
     await deployShopifyThemeByName(name, {
         ignoredFiles: ['templates/']
     })
