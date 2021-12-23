@@ -68,13 +68,10 @@ async function asanaGetTicket(title, prID){
  * @returns 
  */
  async function asanaCompleteTicket(ticketId){
-    
-    console.log('asana complete ticket with ID:', ticketId)
     try {
         return await client.tasks.updateTask(ticketId, {
             "completed": true
         });
-        // return tasks.data.find(task => task.name === nameToSearch);
     } catch {
         return null
     }

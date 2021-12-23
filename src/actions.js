@@ -88,12 +88,7 @@ async function preview(){
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!!existingTicket) {
             await asanaCreateTicket(repositoryName, prURL, URL, prID)
-        } else {
-            console.log('ticket:', existingTicket)
-            const completed = await asanaCompleteTicket(existingTicket.gid)
-            console.log('completed:', completed)
         }
-        
     }
 }
 
@@ -111,8 +106,7 @@ async function previewDelete(){
         const repositoryName = await getRepositoryName()
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!existingTicket) {
-            await asanaCompleteTicket(existingTicket)
-
+            await asanaCompleteTicket(existingTicket.gid)
         }
     }
     await deleteShopifyThemes(name)
