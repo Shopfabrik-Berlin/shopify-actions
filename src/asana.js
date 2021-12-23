@@ -69,7 +69,7 @@ async function asanaGetTicket(title, prID){
  */
  async function asanaCompleteTicket(ticketId){
     
-    console.log('asana complete ticket')
+    console.log('asana complete ticket with ID:', ticketId)
     try {
         return await client.tasks.updateTask(ticketId, {
             "data": {

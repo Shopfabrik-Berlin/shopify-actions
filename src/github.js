@@ -72,8 +72,6 @@ async function getPullRequestURL() {
  * @returns
  */
  async function getPullRequestLabel() {
-  console.log('github context payload.labels:', github.context.payload.pull_request.labels)
-  
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
     return pullRequestLabels.find(label => label.name.toLowerCase() === labelToNotMerge.toLowerCase());

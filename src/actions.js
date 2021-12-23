@@ -89,7 +89,8 @@ async function preview(){
         if (!!!existingTicket) {
             await asanaCreateTicket(repositoryName, prURL, URL, prID)
         } else {
-            await asanaCompleteTicket(existingTicket.id)
+            console.log('ticket:', existingTicket)
+            const completed = await asanaCompleteTicket(existingTicket.id)
         }
         
     }
