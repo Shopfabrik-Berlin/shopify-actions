@@ -54,7 +54,9 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
  */
 async function asanaGetTicket(title, prID){
     const nameToSearch = `PR: ${title} - ${prID}`;
+    console.log('asana get ticket')
     try {
+        console.log('asana get ticket', process.env.ASANA_PR_PROJECT_ID)
         const tasks = await client.tasks.getTasksForProject(process.env.ASANA_PR_PROJECT_ID);
         return tasks.data.find(task => task.name === nameToSearch);
     } catch {
