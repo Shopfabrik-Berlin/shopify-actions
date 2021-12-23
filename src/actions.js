@@ -73,8 +73,9 @@ async function preview(){
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
+        await createGitHubComment(prID, prComment)
     }
-    await createGitHubComment(prID, prComment)
+    
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
     if(result && result.task && result.project){
