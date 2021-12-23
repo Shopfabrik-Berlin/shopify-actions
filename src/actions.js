@@ -91,6 +91,7 @@ async function preview(){
         } else {
             console.log('ticket:', existingTicket)
             const completed = await asanaCompleteTicket(existingTicket.gid)
+            console.log('completed:', completed)
         }
         
     }
