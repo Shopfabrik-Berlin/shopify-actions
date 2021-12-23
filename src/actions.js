@@ -102,10 +102,13 @@ async function previewDelete(){
     const name = `${PREVIEW_NAME} #${prID}`
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
+    console.log('removing preview')
     if(result && result.task && result.project){
+        console.log('result exists')
         const repositoryName = await getRepositoryName()
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!existingTicket) {
+            console.log('completing ticket with:', existingTicket.gid)
             await asanaCompleteTicket(existingTicket.gid)
         }
     }
