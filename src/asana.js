@@ -47,16 +47,14 @@ async function asanaCreateTicket(title, prURL, previewURL, prID){
 
 
 /**
- * Check if ticket is exsiting
+ * Check if task exists
  * @param {*} title 
  * @param {*} prID
  * @returns 
  */
 async function asanaGetTicket(title, prID){
     const nameToSearch = `PR: ${title} - ${prID}`;
-    console.log('asana get ticket')
     try {
-        console.log('asana get ticket', process.env.ASANA_PR_PROJECT_ID)
         const tasks = await client.tasks.getTasksForProject(process.env.ASANA_PR_PROJECT_ID);
         return tasks.data.find(task => task.name === nameToSearch);
     } catch {
@@ -64,11 +62,33 @@ async function asanaGetTicket(title, prID){
     }
 }
 
+/**
+ * Complete task
+ * @param {*} ticketId 
+ * @returns 
+ */
+ async function asanaCompleteTicket(ticketId){
+    
+    console.log('asana complete ticket')
+    try {
+        return await client.tasks.updateTask(ticketId, {
+            "data": {
+                "completed": true
+            }
+        });
+        // return tasks.data.find(task => task.name === nameToSearch);
+    } catch {
+        return null
+    }
+}
+
+
 
 module.exports = {
     asanaComment,
     asanaCreateTicket,
-    asanaGetTicket
+    asanaGetTicket,
+    asanaCompleteTicket
 }
 
 

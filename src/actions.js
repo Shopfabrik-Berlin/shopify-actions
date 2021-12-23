@@ -19,7 +19,8 @@ const {
 const {
     asanaComment,
     asanaCreateTicket,
-    asanaGetTicket
+    asanaGetTicket,
+    asanaCompleteTicket
   } = require('./asana');
 const PREVIEW_NAME = process.env.SHOPIFY_PREVIEW_NAME || "⚠[PREVIEW] - Shopfabrik"
 
@@ -63,23 +64,19 @@ async function preview(){
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
 
-    // Do no deploy if label contains 'X'
-    const labels = await getPullRequestLabel();
-    console.log('labels:', labels)
-
-    await deployShopifyThemeByName(name, {
-        ignoredFiles: ['templates/']
-    })
-    await deployShopifyThemeByName(name, {
-        ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
-    })
-    console.log('deployed shopify theme by name')
+    // Do no deploy if PR label contains 'X'
+    const containsIgnoredLabel = await getPullRequestLabel();
+    if (!!!containsIgnoredLabel ) {
+        await deployShopifyThemeByName(name, {
+            ignoredFiles: ['templates/']
+        })
+        await deployShopifyThemeByName(name, {
+            ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+        })
+    }
     await createGitHubComment(prID, prComment)
-    console.log('createGitHubComment')
     const prBody = await getPullRequestBody()
-    console.log('getPullRequestBody')
     const result = await parseGithubPR(prBody)
-    console.log('parseGithubPR')
     if(result && result.task && result.project){
         const prURL = await getPullRequestURL()
         const repositoryName = await getRepositoryName()
@@ -91,7 +88,10 @@ async function preview(){
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!!existingTicket) {
             await asanaCreateTicket(repositoryName, prURL, URL, prID)
+        } else {
+            await asanaCompleteTicket(existingTicket.id)
         }
+        
     }
 }
 
@@ -103,6 +103,16 @@ async function preview(){
 async function previewDelete(){
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
+    const prBody = await getPullRequestBody()
+    const result = await parseGithubPR(prBody)
+    if(result && result.task && result.project){
+        const repositoryName = await getRepositoryName()
+        const existingTicket = await asanaGetTicket(repositoryName, prID);
+        if (!!existingTicket) {
+            await asanaCompleteTicket(existingTicket)
+
+        }
+    }
     await deleteShopifyThemes(name)
 }
 
