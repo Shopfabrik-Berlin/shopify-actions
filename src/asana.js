@@ -34,13 +34,18 @@ async function asanaComment(taskId, taskComment){
  * @returns 
  */
 async function asanaCreateTicket(title, prURL, previewURL, prID){
+    let dueDate = new Date()
+    // We add 48hrs to due date
+    dueDate.setDate(dueDate.getDate() + 2);
+    dueDate.toISOString().split('T')[0]
     const data = { 
         "assignee": `${process.env.ASANA_PR_ASSIGNEE}`,
         "completed": false,
         "html_notes": `<body>Pull Request: <a href="${prURL}">${prURL}</a>\nPreview: <a href="${previewURL}">${previewURL}</a></body>`,
         "name": `PR: ${title} - ${prID}`,
         "projects": [`${process.env.ASANA_PR_PROJECT_ID}`],
-        "resource_subtype": "default_task"
+        "resource_subtype": "default_task",
+        "due_on": dueDate
     }
     return await client.tasks.create(data);
 }
