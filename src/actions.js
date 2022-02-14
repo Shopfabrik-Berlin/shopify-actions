@@ -17,6 +17,7 @@ const {
     getRepositoryName
   } = require('./github');
 const {
+    asanaHasDeployComment,
     asanaComment,
     asanaCreateTicket,
     asanaGetTicket,
@@ -60,7 +61,7 @@ async function preview(){
     const theme = await createShopifyTheme(name)
     console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
-    const prComment =  `🚀 Deployed successfully to ${URL}`
+    const prComment =  `Automated Message: 🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
 
@@ -81,10 +82,13 @@ async function preview(){
     if(result && result.task && result.project){
         const prURL = await getPullRequestURL()
         const repositoryName = await getRepositoryName()
-        await asanaComment(
-            result.task, 
-            `${prComment}\n Github Pull Request: ${prURL}`
-        )
+        const hasDeployComment = await asanaHasDeployComment(result.task)
+        if(!hasDeployComment){
+            await asanaComment(
+                result.task, 
+                `${prComment}\n Github Pull Request: ${prURL}`
+            )
+        }
         // Check if ticket already exists
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!!existingTicket) {

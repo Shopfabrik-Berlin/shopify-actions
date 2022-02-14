@@ -25,6 +25,17 @@ async function asanaComment(taskId, taskComment){
     });
 }
 
+
+/**
+ * Will get a list of comments (stories) by task id
+ * @param {*} taskId 
+ * @param {*} taskComment 
+ * @returns 
+ */
+ async function asanaGetComments(taskId){
+    return await client.tasks.stories(taskId);
+}
+
 /**
  * Will create a new issue in a specific project 
  * @param {*} title 
@@ -84,8 +95,25 @@ async function asanaGetTicket(title, prID){
 }
 
 
+/**
+ * Check if task already includes deploy comment
+ * @param {*} ticketId 
+ * @returns 
+ */
+ async function asanaHasDeployComment(ticketId){
+    const comments = await asana.asanaGetComments(ticketId) || []
+    const found = comments.data.find(comment => {
+       if(comment.text.indexOf('Deployed successfully to') !== -1){
+        return true
+       }
+    })
+    return found ? true : false
+}
+
+
 
 module.exports = {
+    asanaGetComments,
     asanaComment,
     asanaCreateTicket,
     asanaGetTicket,
