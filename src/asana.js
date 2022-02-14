@@ -101,7 +101,7 @@ async function asanaGetTicket(title, prID){
  * @returns 
  */
  async function asanaHasDeployComment(ticketId){
-    const comments = await asana.asanaGetComments(ticketId) || []
+    const comments = await asanaGetComments(ticketId) || []
     const found = comments.data.find(comment => {
        if(comment.text.indexOf('Deployed successfully to') !== -1){
         return true
