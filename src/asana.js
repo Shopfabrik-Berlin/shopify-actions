@@ -113,6 +113,7 @@ async function asanaGetTicket(title, prID){
 
 
 module.exports = {
+    asanaHasDeployComment,
     asanaGetComments,
     asanaComment,
     asanaCreateTicket,
