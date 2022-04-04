@@ -5,12 +5,14 @@ on:
     outputs:
       status:
         description: "Log output status"
-        value: ${{ steps.postAttachment.outputs.status }}
+        value: ${{ jobs.create_asana_attachment_job.outputs.output1  }}
 
 jobs:
-  create-asana-attachment-job:
+  create_asana_attachment_job:
     runs-on: ubuntu-latest
     name: Create pull request attachments on Asana tasks
+    outputs:
+      status: ${{ steps.postAttachment.outputs.status }}
     steps:
       - name: Create pull request attachments
         uses: Asana/create-app-attachment-github-action@latest
