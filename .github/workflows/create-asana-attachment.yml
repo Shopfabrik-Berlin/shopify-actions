@@ -1,7 +1,11 @@
+name: Asana Github PR Attachment
 
 on:
-  pull_request:
-    types: [opened, reopened]
+  workflow_call:
+    outputs:
+      status:
+        description: "Log output status"
+        value: ${{ steps.postAttachment.outputs.status }}
 
 jobs:
   create-asana-attachment-job:
