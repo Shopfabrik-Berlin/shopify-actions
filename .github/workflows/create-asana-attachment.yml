@@ -2,6 +2,9 @@ name: Asana Github PR Attachment
 
 on:
   workflow_call:
+    secrets:
+      ASANA_SECRET:
+        required: true
     outputs:
       status:
         description: "Log output status"
