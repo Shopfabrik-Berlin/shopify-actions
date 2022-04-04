@@ -5,7 +5,7 @@ on:
     outputs:
       status:
         description: "Log output status"
-        value: ${{ jobs.create_asana_attachment_job.outputs.output1  }}
+        value: ${{ jobs.create_asana_attachment_job.outputs.status  }}
 
 jobs:
   create_asana_attachment_job:
