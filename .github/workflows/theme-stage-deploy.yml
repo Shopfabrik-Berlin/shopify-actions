@@ -1,4 +1,4 @@
-name: Preview - Deploy Shopify Theme
+name: Staging - Theme Shopify deploy to Staging
 
 on:
   workflow_call:
@@ -30,3 +30,4 @@ jobs:
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
