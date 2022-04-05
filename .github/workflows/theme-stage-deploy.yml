@@ -1,0 +1,30 @@
+name: Preview - Deploy Shopify Theme
+
+on:
+  workflow_call:
+    secrets:
+      SHOPIFY_PASSWORD:
+        required: true
+      SHOPIFY_STORE_URL:
+        required: true
+      SHOPIFY_THEME_ID:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:  
+    - name: Check out Git repository
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - run: yarn install
+    - run: yarn build
+    - name: Deploy preview theme
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+      env:
+        TASK: DEPLOY
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}

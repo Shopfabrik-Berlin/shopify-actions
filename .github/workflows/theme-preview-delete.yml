@@ -1,0 +1,32 @@
+name: Preview - Delete Shopify Theme Test
+
+on:
+  workflow_call:
+    secrets:
+      SHOPIFY_PASSWORD:
+        required: true
+      SHOPIFY_STORE_URL:
+        required: true
+      ASANA_SECRET:
+        required: true
+      ASANA_TOKEN:
+        required: true
+      ASANA_PR_PROJECT_ID:
+        required: true
+      ASANA_PR_ASSIGNEE:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:  
+    - name: Delete preview theme
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+      env:
+        TASK: PREVIEW_DELETE
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+        ASANA_PR_PROJECT_ID: ${{ secrets.ASANA_PR_PROJECT_ID }}
+        ASANA_PR_ASSIGNEE: ${{ secrets.ASANA_PR_ASSIGNEE }}
