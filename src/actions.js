@@ -81,7 +81,7 @@ async function preview(){
     const result = await parseGithubPR(prBody)
     if(result && result.task && result.project){
         const prURL = await getPullRequestURL()
-        const repositoryName = await getRepositoryName()
+        //const repositoryName = await getRepositoryName()
         const hasDeployComment = await asanaHasDeployComment(result.task)
         if(!hasDeployComment){
             await asanaComment(
@@ -90,10 +90,10 @@ async function preview(){
             )
         }
         // Check if ticket already exists
-        const existingTicket = await asanaGetTicket(repositoryName, prID);
-        if (!!!existingTicket) {
-            await asanaCreateTicket(repositoryName, prURL, URL, prID)
-        }
+        // const existingTicket = await asanaGetTicket(repositoryName, prID);
+        // if (!!!existingTicket) {
+        //     await asanaCreateTicket(repositoryName, prURL, URL, prID)
+        // }
     }
 }
 
