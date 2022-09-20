@@ -205,6 +205,7 @@ async function getParcelFiles(themeId) {
     console.log(jsFiles);
     return jsFiles;
   } catch (error) {
+    console.log("Couldn't find any parcel files");
     console.error(error);
     return error;
   }
