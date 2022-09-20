@@ -12,7 +12,7 @@ jobs:
         with:
           ref: backup
       - name: Backup theme
-        uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+        uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
         env:
           TASK: BACKUP
           SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
