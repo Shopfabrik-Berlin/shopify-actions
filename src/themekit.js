@@ -199,9 +199,15 @@ async function getIgnoredTemplates(themeId) {
  * @returns 
  */
 async function getParcelFiles(themeId) {
-  const jsFiles = await getShopifyAssets(themeId, `asset[key]=assets/*.parcel.*.js`)
-  console.log(jsFiles);
-  return jsFiles;
+  try {
+    const jsFiles = await getShopifyAssets(themeId, `asset[key]=assets/*.parcel.*.js`);
+    console.log('jsFiles');
+    console.log(jsFiles);
+    return jsFiles;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 }
 
 async function getThemekitVersion() {
