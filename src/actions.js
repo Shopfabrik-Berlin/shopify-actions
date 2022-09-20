@@ -4,7 +4,8 @@ const {
     getIgnoredTemplates,
     downloadShopifyTheme,
     deployShopifyThemeByName,
-    deleteShopifyThemes
+    deleteShopifyThemes,
+    getParcelFiles
   } = require('./themekit');
 const {
     getPullRequestID,

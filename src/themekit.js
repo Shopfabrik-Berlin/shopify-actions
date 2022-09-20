@@ -54,6 +54,7 @@ async function createShopifyTheme(name) {
         throw new Error(`Couldn't create theme: ${name}...`)
       }
     } else{
+        const parcelJS = await getParcelFiles();
         console.log(`Found theme: ${name} with ID: ${theme.id} ...`);
         return theme
     }
@@ -192,6 +193,17 @@ async function getIgnoredTemplates(themeId) {
 }
 
 
+/**
+ * Will get a list of assets/*.parcel.*.js, assets/*.parcel.*.css, assets/index.parcel.js files that are in the theme
+ * @param {*} themeId 
+ * @returns 
+ */
+async function getParcelFiles(themeId) {
+  const jsFiles = await getShopifyAssets(themeId, `asset[key]=assets/*.parcel.*.js`)
+  console.log(jsFiles);
+  return jsFiles;
+}
+
 async function getThemekitVersion() {
   return await themeKit.command('version');
 }
@@ -206,5 +218,6 @@ module.exports = {
   getShopifyAssets,
   getIgnoredTemplates,
   downloadShopifyTheme,
-  deployShopifyThemeByName
+  deployShopifyThemeByName,
+  getParcelFiles
 };
