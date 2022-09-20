@@ -20,7 +20,7 @@ jobs:
       # ... steps to build Shopify theme ...
 
       - name: Staging - Deploy staging theme
-        uses: Shopfabrik-Berlin/shopify-actions@shopify-2.0
+        uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
         env:
           TASK: DEPLOY
           SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
