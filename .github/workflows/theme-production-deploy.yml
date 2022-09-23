@@ -30,4 +30,12 @@ jobs:
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
         SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
         SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
+    - name: Clean up theme
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
+      env:
+        TASK: CLEAN
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
