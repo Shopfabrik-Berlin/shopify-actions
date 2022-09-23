@@ -3,7 +3,8 @@ const {
     preview,
     deploy,
     previewDelete,
-    backup
+    backup,
+    clean
   } = require('./actions');
 
 
@@ -27,6 +28,8 @@ async function run() {
         await backup()
     } else if(task === "PREVIEW_DELETE"){
         await previewDelete()
+    } else if(task === "CLEAN"){
+      await clean()
     } else {
         core.setFailed(`Error, unknown action ${task}`);
     }

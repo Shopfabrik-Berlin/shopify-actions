@@ -6,7 +6,7 @@ const {
     deployShopifyThemeByName,
     deleteShopifyThemes,
     getParcelFiles
-  } = require('./themekit');
+} = require('./themekit');
 const {
     getPullRequestID,
     createGitHubComment,
@@ -16,15 +16,18 @@ const {
     getPullRequestURL,
     getPullRequestLabel,
     getRepositoryName
-  } = require('./github');
+} = require('./github');
 const {
     asanaHasDeployComment,
     asanaComment,
     asanaCreateTicket,
     asanaGetTicket,
     asanaCompleteTicket
-  } = require('./asana');
-const PREVIEW_NAME = process.env.SHOPIFY_PREVIEW_NAME || "⚠[PREVIEW] - Shopfabrik"
+} = require('./asana');
+
+const PREVIEW_NAME = process.env.SHOPIFY_PREVIEW_NAME || "⚠[PREVIEW] - Shopfabrik"
+
+const axios = require('axios');
 
 
 /**
@@ -32,7 +35,7 @@ const PREVIEW_NAME = process.env.SHOPIFY_PREVIEW_NAME || "⚠[PREVIEW] - Shopfa
  * Will deploy a theme 
  * 
  */
-async function deploy(){
+async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID
     // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
     // to not override settings we need to ignore templates that already exist   
@@ -46,6 +49,30 @@ async function deploy(){
     })
 }
 
+/**
+ * 
+ * Will remove old parcel files
+ * 
+ */
+async function clean() {
+    var getAssetsConfig = {
+        method: 'get',
+        url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${process.env.SHOPIFY_THEME_ID}/assets.json`,
+        headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}`}
+    };
+
+    const assets = await axios(getAssetsConfig)
+        .then(function (response) {
+            return JSON.stringify(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    console.log('---GET assets result:');
+    console.log(assets);
+}
+
 
 /**
  * 
@@ -55,20 +82,20 @@ async function deploy(){
  * It will also create an Issue in a Pull Request Project to check the PR by senior dev
  * 
  */
-async function preview(){
+async function preview() {
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createShopifyTheme(name)
     console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
-    const prComment =  `Automated Message: 🚀 Deployed successfully to ${URL}`
+    const prComment = `Automated Message: 🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
     // first we need to deploy all sections + snippets and then the template files
 
     // Do no deploy if PR label contains 'X'
     const containsIgnoredLabel = await getPullRequestLabel();
-    if (!!!containsIgnoredLabel ) {
+    if (!!!containsIgnoredLabel) {
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['templates/']
         })
@@ -77,16 +104,16 @@ async function preview(){
         })
         await createGitHubComment(prID, prComment)
     }
-    
+
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
-    if(result && result.task && result.project){
+    if (result && result.task && result.project) {
         const prURL = await getPullRequestURL()
         //const repositoryName = await getRepositoryName()
         const hasDeployComment = await asanaHasDeployComment(result.task)
-        if(!hasDeployComment){
+        if (!hasDeployComment) {
             await asanaComment(
-                result.task, 
+                result.task,
                 `${prComment}\n Github Pull Request: ${prURL}`
             )
         }
@@ -103,13 +130,13 @@ async function preview(){
  * Will delete a Pull Request after merge or close
  * 
  */
-async function previewDelete(){
+async function previewDelete() {
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
     console.log('removing preview')
-    if(result && result.task && result.project){
+    if (result && result.task && result.project) {
         const repositoryName = await getRepositoryName()
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!existingTicket) {
@@ -128,7 +155,7 @@ async function previewDelete(){
  * The workflow .yml will also push it to a "backup" branch 
  * 
  */
-async function backup(){
+async function backup() {
     const themeID = process.env.SHOPIFY_THEME_ID
     await downloadShopifyTheme(themeID)
 }
@@ -140,5 +167,6 @@ module.exports = {
     deploy,
     preview,
     previewDelete,
-    backup
+    backup,
+    clean
 }
