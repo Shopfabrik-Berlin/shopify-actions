@@ -10,7 +10,7 @@ on:
       SHOPIFY_THEME_ID:
         required: true
       SHOPIFY_LOCALE:
-        required: true
+        required: false
 
 jobs:
   deploy:
