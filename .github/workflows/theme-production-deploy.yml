@@ -23,6 +23,8 @@ jobs:
         node-version: '16'
     - run: yarn install
     - run: yarn build
+      env: 
+        TIMESTAMP: $(date)
     - name: Deploy production theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
       env:
