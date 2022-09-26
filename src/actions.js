@@ -71,6 +71,10 @@ async function clean() {
 
     console.log('---GET assets result:');
     console.log(assets);
+
+    const parcelFiles = assets.filter(file => file.key.includes('parcel'));
+    console.log('---Parcel files:');
+    console.log(parcelFiles);
 }
 
 
