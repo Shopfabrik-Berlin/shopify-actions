@@ -61,7 +61,7 @@ async function clean() {
         headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}`}
     };
 
-    const assets = await axios(getAssetsConfig)
+    const assetsJSON = await axios(getAssetsConfig)
         .then(function (response) {
             return JSON.stringify(response.data);
         })
@@ -70,8 +70,9 @@ async function clean() {
         });
 
     console.log('---GET assets result:');
-    console.log(assets);
+    console.log(assetsJSON);
 
+    const assets = JSON.parse(assetsJSON);
     const parcelFiles = assets.filter(file => file.key.includes('parcel'));
     console.log('---Parcel files:');
     console.log(parcelFiles);
