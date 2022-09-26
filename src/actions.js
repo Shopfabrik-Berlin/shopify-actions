@@ -61,28 +61,31 @@ async function clean() {
         headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}`}
     };
 
-    const assetsJSON = await axios(getAssetsConfig)
+    const assets = await axios(getAssetsConfig)
         .then(function (response) {
-            return JSON.stringify(response.data);
+            return response.data.assets;
         })
         .catch(function (error) {
             console.log(error);
         });
 
-    console.log('---GET assets result:');
-    console.log(assetsJSON);
+    const parcelFiles = assets.filter(asset => asset.key.includes('parcel'));
 
-    const assets = JSON.parse(assetsJSON);
-    const parcelFiles = [];
-    for (let i = 0; i < assets.length; i++) {
-        const file = assets[i];
-        if (file.key.includes('parcel')) {
-            parcelFiles.push(file);
-        }
-    }
-    
-    console.log('---Parcel files:');
-    console.log(parcelFiles);
+    parcelFiles.forEach(file => {
+        var delAssetConfig = {
+            method: 'delete',
+            url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${process.env.SHOPIFY_THEME_ID}/assets.json?asset[key]=${file.key}`,
+            headers: { 'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}` }
+        };
+        axios(delAssetConfig)
+            .then(function (response) {
+                console.log(`${file.key} was successfully deleted!`);
+                return response;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    });
 }
 
 /**
