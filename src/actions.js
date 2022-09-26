@@ -97,6 +97,10 @@ async function clean() {
         }
     });
 
+    if (listOfNewestParcelFiles.length < 1 || listOfNewestParcelFiles[0] === 0) {
+        return;
+    }
+
     const listOfOldestParcelFiles = [];
     parcelFiles.forEach(file => {
         const splittedKeyCurrent = file.key.split('.');
@@ -109,6 +113,10 @@ async function clean() {
             }
         });
     });
+
+    if (listOfOldestParcelFiles.length < 1) {
+        return;
+    }
 
     listOfOldestParcelFiles.forEach(file => {
         var delAssetConfig = {
