@@ -22,9 +22,12 @@ jobs:
       with:
         node-version: '16'
     - run: yarn install
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(($(date +%s%N)/1000000))"
     - run: yarn build
       env: 
-        TIMESTAMP: $(date)
+        TIMESTAMP: ${{ steps.date.outputs.date }}
     - name: Deploy production theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
       env:
