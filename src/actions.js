@@ -71,7 +71,46 @@ async function clean() {
 
     const parcelFiles = assets.filter(asset => asset.key.includes('parcel'));
 
+    let listOfNewestParcelFiles = [0];
+    parcelFiles.forEach((file, idx) => {
+        const splittedKeyCurrent = file.key.split('.');
+        const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
+
+        for (let i = 0; i < listOfNewestParcelFiles.length; i++) {
+            const newestFile = listOfNewestParcelFiles[i];
+
+            if (newestFile === 0) {
+                listOfNewestParcelFiles[0] = file;
+                break;
+            }
+
+            const splittedKeyNewest = newestFile.key.split('.');
+            const timestampNewest = +splittedKeyNewest[splittedKeyNewest.length - 2];
+            if (timestampCurrent > timestampNewest) {
+                listOfNewestParcelFiles = [];
+                listOfNewestParcelFiles.push(file);
+                break;
+            }
+            if (timestampCurrent === timestampNewest && file !== newestFile) {
+                listOfNewestParcelFiles.push(file);
+            }
+        }
+    });
+
+    const listOfOldestParcelFiles = [];
     parcelFiles.forEach(file => {
+        const splittedKeyCurrent = file.key.split('.');
+        const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
+        listOfNewestParcelFiles.forEach(newestFile => {
+            const splittedKeyNewest = newestFile.key.split('.');
+            const timestampNewest = +splittedKeyNewest[splittedKeyNewest.length - 2];
+            if (timestampCurrent < timestampNewest) {
+                listOfOldestParcelFiles.push(file);
+            }
+        });
+    });
+
+    listOfOldestParcelFiles.forEach(file => {
         var delAssetConfig = {
             method: 'delete',
             url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${process.env.SHOPIFY_THEME_ID}/assets.json?asset[key]=${file.key}`,
