@@ -55,20 +55,6 @@ async function deploy() {
  * 
  */
 async function clean() {
-    // var getAssetsConfig = {
-    //     method: 'get',
-    //     url: `https://parcel-background.myshopify.com//admin/api/2022-07/themes/134460047605/assets.json`,
-    //     headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `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`};
-    // };
-
-    // (function () {
-    //     if (typeof window.R === 'undefined') {
-    //       var s = document.createElement('script');
-    //       s.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js');
-    //       document.body.appendChild(s);
-    //     }
-    //   }());
-    
     var getAssetsConfig = {
         method: 'get',
         url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${process.env.SHOPIFY_THEME_ID}/assets.json`,
@@ -87,12 +73,17 @@ async function clean() {
     console.log(assetsJSON);
 
     const assets = JSON.parse(assetsJSON);
-    console.log(typeof assets);
-    const parcelFiles = assets.filter(file => file.key.includes('parcel'));
+    const parcelFiles = [];
+    for (let i = 0; i < assets.length; i++) {
+        const file = assets[i];
+        if (file.key.includes('parcel')) {
+            parcelFiles.push(file);
+        }
+    }
+    
     console.log('---Parcel files:');
     console.log(parcelFiles);
 }
-
 
 /**
  * 
