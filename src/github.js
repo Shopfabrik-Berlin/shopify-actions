@@ -91,6 +91,8 @@ async function getPullRequestURL() {
     return pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
+      console.log('label');
+      console.log(label);
       console.log('labelLowered');
       console.log(labelLowered);
       console.log('labelSplitted');
