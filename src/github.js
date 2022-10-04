@@ -85,7 +85,7 @@ async function getPullRequestURL() {
  * It finds label e.g. dev-ns-theme_id to take data from this theme
  * @returns
  */
- async function getDevIdFromPRsLabel() {
+ function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
     return pullRequestLabels.find(label => {

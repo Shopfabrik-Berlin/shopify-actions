@@ -164,7 +164,7 @@ async function preview() {
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
-        const devThemeId = await getDevIdFromPRsLabel();
+        const devThemeId = getDevIdFromPRsLabel();
         console.log('devThemeId');
         console.log(devThemeId);
         const dynamicData = await downloadShopifyTheme(devThemeId, {
