@@ -91,6 +91,10 @@ async function getPullRequestURL() {
     return pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
+      console.log('labelLowered');
+      console.log(labelLowered);
+      console.log('labelSplitted');
+      console.log(labelSplitted);
       if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
         const id = labelSplitted[labelSplitted.length - 1];
         console.log("Development theme id is " + id);
