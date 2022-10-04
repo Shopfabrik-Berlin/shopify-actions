@@ -47,7 +47,7 @@ async function createGitHubComment(prID, message) {
  * @returns
  */
 async function getPullRequestID() {
-  
+
   return github.context.issue.number;
 };
 
@@ -72,7 +72,7 @@ async function getPullRequestURL() {
  * Will return if Pull Request label is compared
  * @returns
  */
- async function getPullRequestLabel() {
+async function getPullRequestLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
     return pullRequestLabels.find(label => label.name.toLowerCase() === labelToNotMerge.toLowerCase());
@@ -85,10 +85,11 @@ async function getPullRequestURL() {
  * It finds label e.g. dev-ns-theme_id to take data from this theme
  * @returns
  */
- function getDevIdFromPRsLabel() {
+function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
-      pullRequestLabels.find(label => {
+    let id;
+    pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
       console.log('label');
@@ -98,11 +99,12 @@ async function getPullRequestURL() {
       console.log('labelSplitted');
       console.log(labelSplitted);
       if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
-        const id = labelSplitted[labelSplitted.length - 1];
+        id = labelSplitted[labelSplitted.length - 1];
         console.log("Development theme id is " + id);
         return id;
       }
     });
+    return id;
   } else {
     console.log("Development theme id is null");
     return null;
@@ -116,16 +118,16 @@ async function getPullRequestURL() {
 async function getRepositoryName() {
   return github.context.payload.repository.name;
 };
-  
+
 
 /**
  * Will parse the Asana URL from a Pull Request body
  * @param {*} prBody 
  * @returns 
  */
-async function parseGithubPR(prBody){
+async function parseGithubPR(prBody) {
   const result = REGEX.exec(prBody)
-  if(result){
+  if (result) {
     return result.groups
   }
   return null
@@ -133,13 +135,13 @@ async function parseGithubPR(prBody){
 
 
 module.exports = {
-    getPullRequestID,
-    createGitHubComment,
-    commentIdentifier,
-    getPullRequestBody,
-    parseGithubPR,
-    getPullRequestURL,
-    getPullRequestLabel,
-    getDevIdFromPRsLabel,
-    getRepositoryName
+  getPullRequestID,
+  createGitHubComment,
+  commentIdentifier,
+  getPullRequestBody,
+  parseGithubPR,
+  getPullRequestURL,
+  getPullRequestLabel,
+  getDevIdFromPRsLabel,
+  getRepositoryName
 }
