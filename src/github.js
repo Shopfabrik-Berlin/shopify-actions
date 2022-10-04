@@ -8,6 +8,7 @@ const REGEX = new RegExp(
 );
 
 const labelToNotMerge = "No Preview";
+const partOfDevIdLabel = "dev";
 
 async function createGitHubDeployment(url) {
   const deployment = await octokit.repos.createDeployment({
@@ -81,6 +82,28 @@ async function getPullRequestURL() {
 };
 
 /**
+ * It finds label e.g. dev-ns-theme_id to take data from this theme
+ * @returns
+ */
+ async function getDevIdFromPRsLabel() {
+  const pullRequestLabels = github.context.payload.pull_request.labels;
+  if (!!pullRequestLabels.length) {
+    return pullRequestLabels.find(label => {
+      const labelLowered = label.name.toLowerCase();
+      const labelSplitted = labelLowered.split('-');
+      if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
+        const id = labelSplitted[labelSplitted.length - 1];
+        console.log("Development theme id is " + id);
+        return id;
+      }
+    });
+  } else {
+    console.log("Development theme id is null");
+    return null;
+  }
+};
+
+/**
  * Will return the repository name 
  * @returns
  */
@@ -111,5 +134,6 @@ module.exports = {
     parseGithubPR,
     getPullRequestURL,
     getPullRequestLabel,
+    getDevIdFromPRsLabel,
     getRepositoryName
 }

@@ -15,6 +15,7 @@ const {
     parseGithubPR,
     getPullRequestURL,
     getPullRequestLabel,
+    getDevIdFromPRsLabel,
     getRepositoryName
 } = require('./github');
 const {
@@ -163,6 +164,12 @@ async function preview() {
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
+        const devThemeId = await getDevIdFromPRsLabel();
+        const dynamicData = await downloadShopifyTheme(devThemeId, {
+            ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+        });
+        console.log(`Downloaded data from #${devThemeId} is below`);
+        console.log(dynamicData);
         await createGitHubComment(prID, prComment)
     }
 
