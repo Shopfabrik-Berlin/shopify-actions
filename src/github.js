@@ -88,7 +88,7 @@ async function getPullRequestURL() {
  function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
-    return pullRequestLabels.find(label => {
+      pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
       console.log('label');
