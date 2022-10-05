@@ -165,14 +165,16 @@ async function preview() {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
         const labelDev = await getDevIdFromPRsLabel();
-        console.log('labelDev');
-        console.log(labelDev);
-        console.log('labelDev.name');
-        console.log(labelDev.name);
-        const dynamicData = await downloadShopifyTheme(devThemeId, {
-            ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
-        });
-        console.log(`Downloaded data from #${devThemeId} is below`);
+        let dynamicData;
+        if (labelDev) {
+            const labelDevLowered = labelDev.name.toLowerCase();
+            const labelDevSplitted = labelDevLowered.split('-');
+            const devThemeId = labelDevSplitted[labelDevSplitted.length - 1];
+            console.log(`Downloaded data from #${devThemeId} is below`);
+            dynamicData = await downloadShopifyTheme(devThemeId, {
+                ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+            });
+        }
         console.log(dynamicData);
         await createGitHubComment(prID, prComment)
     }
