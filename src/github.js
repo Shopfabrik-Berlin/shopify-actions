@@ -100,8 +100,9 @@ async function getDevIdFromPRsLabel() {
       if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
         // id = labelSplitted[labelSplitted.length - 1];
         // console.log("Development theme id is " + id);
-        return label;
+        return true;
       } 
+      return false;
     });
   } else {
     console.log("Development theme id is null");
