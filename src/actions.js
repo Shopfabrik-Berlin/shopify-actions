@@ -175,6 +175,7 @@ async function preview() {
                 ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
             });
         }
+        console.log('dynamicData');
         console.log(dynamicData);
         await createGitHubComment(prID, prComment)
     }
