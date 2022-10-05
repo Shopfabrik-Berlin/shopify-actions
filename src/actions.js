@@ -165,18 +165,17 @@ async function preview() {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
         const labelDev = await getDevIdFromPRsLabel();
-        let dynamicData;
         if (labelDev) {
             const labelDevLowered = labelDev.name.toLowerCase();
             const labelDevSplitted = labelDevLowered.split('-');
             const devThemeId = labelDevSplitted[labelDevSplitted.length - 1];
-            console.log(`Downloaded data from #${devThemeId} is below`);
-            dynamicData = await downloadShopifyTheme(devThemeId, {
+            await downloadShopifyTheme(devThemeId, {
                 ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
             });
+            await deployShopifyThemeByName(name, {
+                ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+            })
         }
-        console.log('dynamicData');
-        console.log(dynamicData);
         await createGitHubComment(prID, prComment)
     }
 
