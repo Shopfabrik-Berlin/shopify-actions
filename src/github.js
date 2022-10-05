@@ -85,7 +85,7 @@ async function getPullRequestLabel() {
  * It finds label e.g. dev-ns-theme_id to take data from this theme
  * @returns
  */
-function getDevIdFromPRsLabel() {
+async function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
     let id;
@@ -101,9 +101,11 @@ function getDevIdFromPRsLabel() {
       if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
         id = labelSplitted[labelSplitted.length - 1];
         console.log("Development theme id is " + id);
-        return id;
+        return;
       }
     });
+    console.log('id before return id');
+    console.log(id);
     return id;
   } else {
     console.log("Development theme id is null");
