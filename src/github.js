@@ -88,8 +88,7 @@ async function getPullRequestLabel() {
 async function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
-    let id;
-    await Promise.all(pullRequestLabels.forEach(label => {
+    return pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
       console.log('label');
@@ -99,12 +98,11 @@ async function getDevIdFromPRsLabel() {
       console.log('labelSplitted');
       console.log(labelSplitted);
       if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
-        id = labelSplitted[labelSplitted.length - 1];
-        console.log("Development theme id is " + id);
-        return true;
-      }
-    }));
-    return id;
+        // id = labelSplitted[labelSplitted.length - 1];
+        // console.log("Development theme id is " + id);
+        return label;
+      } 
+    });
   } else {
     console.log("Development theme id is null");
     return null;
