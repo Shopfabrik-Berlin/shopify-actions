@@ -30,6 +30,8 @@ jobs:
       id: date
       run: echo "::set-output name=date::$(($(date +'%s%N')/1000000))"
     - run: yarn build
+      env: 
+          TIMESTAMP: ${{ steps.date.outputs.date }}
     - name: Deploy preview theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
       env:
