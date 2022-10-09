@@ -76,7 +76,13 @@ async function clean() {
 
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
+        const devAsset = asset.key.includes('dev');
+        if (devAsset) {
+            listOfOldestParcelFiles.push(file);
+        }
+
         const splittedKeyCurrent = file.key.split('.');
+
         const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
 
         for (let i = 0; i < listOfNewestParcelFiles.length; i++) {
