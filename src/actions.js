@@ -70,7 +70,9 @@ async function clean() {
             console.log(error);
         });
 
-    const parcelFiles = assets.filter(asset => asset.key.includes('parcel'));
+    const parcelFiles = assets.filter(asset => {
+        return asset.key.includes('parcel') || asset.key.includes('dev');
+    });
 
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
