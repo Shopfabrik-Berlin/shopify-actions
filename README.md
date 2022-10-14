@@ -49,15 +49,18 @@ Needed for the live theme.
 It analyzes elements in the viewport and takes styles for them from --file to improve FCP. --file - minified styles from app/styles/index.scss. This file is built in the production-deploy action. CSS is stored as snippets for server-side rendering, this way is faster.
 
 1. In the "scripts" of package.json . Just follow the examples below.
+```
+"critical": "concurrently \"yarn critical:index\" \"yarn critical:about\" \"yarn critical:cdp\" ",
 
-`"critical": "concurrently \"yarn critical:index\" \"yarn critical:about\" \"yarn critical:cdp\" ",`
-`"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/all-styles.css --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"`
-`"critical:about": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/pages/about --file=assets/all-styles.min.css --output=snippets/critical-about.min.css.liquid --ignoreConsole=true"`
-`"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/collections/all --file=assets/all-styles.css --output=snippets/critical-collections-all.min.css.liquid --ignoreConsole=true"`
+"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/all-styles.css --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
 
+"critical:about": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/pages/about --file=assets/all-styles.min.css --output=snippets/critical-about.min.css.liquid --ignoreConsole=true"
+
+"critical:cdp": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/collections/all --file=assets/all-styles.css --output=snippets/critical-collections-all.min.css.liquid --ignoreConsole=true"
+```
 2. In the snippets/critical-style-controller.liquid:
-
-`{% assign handle = template.name | append: '.' | append: template.suffix %}
+```
+{% assign handle = template.name | append: '.' | append: template.suffix %}
 {% case handle %}
   {% when 'index.' %}
     <style>
@@ -72,8 +75,8 @@ It analyzes elements in the viewport and takes styles for them from --file to im
       {% render'critical-collections-all.min.css'%}
     </style>
   {% else %}
-{% endcase %}`
-
+{% endcase %}
+```
 3. "critical-style-controller.liquid" must be included in the theme.liquid.
 
 4. Include these styles to the app/styles/index.scss/
