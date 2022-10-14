@@ -72,8 +72,7 @@ async function clean() {
         });
 
     const parcelFiles = assets.filter(asset => asset.key.includes('parcel'));
-
-    const listOfOldestParcelFiles = [];
+    
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
         const splittedKeyCurrent = file.key.split('.');
@@ -104,6 +103,11 @@ async function clean() {
     if (listOfNewestParcelFiles.length < 1 || listOfNewestParcelFiles[0] === 0) {
         return;
     }
+    const listOfOldestParcelFiles = [];
+    
+    console.log('\nparcelFiles')
+    console.log(parcelFiles)
+    console.log('\n')
     parcelFiles.forEach(file => {
         const splittedKeyCurrent = file.key.split('.');
         const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
@@ -119,7 +123,7 @@ async function clean() {
     if (listOfOldestParcelFiles.length < 1) {
         return;
     }
-    console.log('/nFiles to delete')
+    console.log('\nFiles to delete')
     console.log(listOfOldestParcelFiles)
     console.log('\n')
     listOfOldestParcelFiles.forEach(file => {
