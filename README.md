@@ -20,20 +20,21 @@ It requests .js for the current page. Scss files are not compiling to css. Parce
 
 In the main index.js file (EXAMPLE):
 `
-const template = window.theme.template;
-if (template == 'page.about-us') {
-    // Styles splitting
-    import('./styles/pages/about-us.scss').then(function (classes) {
-        document.body.className = classes.body;
-    }).catch(function (error) {
-        console.warn(error);
-    });
+    const template = window.theme.template;
+    if (template == 'page.about-us') {
+        // Styles splitting
+        import('./styles/pages/about-us.scss').then(function (classes) {
+            document.body.className = classes.body;
+        }).catch(function (error) {
+            console.warn(error);
+        });
 
-    // Code splitting
-    import("./pages/about-us.js").then(function (page) {
-        // run your scripts
-    });
-} `
+        // Code splitting
+        import("./pages/about-us.js").then(function (page) {
+            // run your scripts
+        });
+    } 
+`
 
 Routes to files can be anything you like. I offer the next structure:
 - app
