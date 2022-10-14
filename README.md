@@ -15,7 +15,7 @@
 
 When you're working on your dev theme you're getting *.dev.js(css, map) outputs. If you're writting some js for a new page, you have to include scripts and styles to the index.js manually, also you have to add commands for creating critical css manually. Code splitting and critical css information is below.
 
-##Code & Styles splitting:
+## Code & Styles splitting:
 It requests .js for the current page. Scss files are not compiling to css. Parcel takes code from a scss file and includes classes to the body.
 
 In the main index.js file (EXAMPLE):
@@ -43,7 +43,7 @@ Routes to files can be anything you like. I offer the next structure:
     - tools => some stuff for build e.g. renamer.js
     - index.js
 
-##Critical css:'
+## Critical css:'
 Needed for the live theme.
 It analyzes elements in the viewport and takes styles for them from --file to improve FCP. --file - minified styles from app/styles/index.scss. This file is built in the production-deploy action. CSS is stored as snippets for server-side rendering, this way is faster.
 
@@ -77,9 +77,9 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 
 4. Include these styles to the app/styles/index.scss/
 
-##After duplicating live to a new theme:
+## After duplicating live to a new theme:
 1. Remove *.parcel.*.js (css) files before doing a new build. You can use yarn clean to do this, but it doesn't work on Windows 
 
-###To improve:
+### To improve:
 1. yarn clean doesn't work on Windows, because some commands like rm isn't supported there. So we should resolve it somehow.
 2. Criticalcss: if url is /product/product-handle? How we can define criticalcss for the list of urls, because lots of products can use 1 template?
