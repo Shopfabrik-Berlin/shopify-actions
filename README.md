@@ -44,7 +44,7 @@ Routes to files can be anything you like. I offer the next structure:
     - tools => some stuff for build e.g. renamer.js
     - index.js
 
-## Critical css:'
+## Critical css:
 Needed for the live theme.
 It analyzes elements in the viewport and takes styles for them from --file to improve FCP. --file - minified styles from app/styles/index.scss. This file is built in the production-deploy action. CSS is stored as snippets for server-side rendering, this way is faster.
 
