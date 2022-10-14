@@ -1,4 +1,4 @@
-##Setup for new project:
+## Setup for new project:
 1. Create master br and development from master.
 2. Get workflows files for .github/ folder.
 3. Prepare package.json
