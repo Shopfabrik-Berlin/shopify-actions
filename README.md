@@ -1,6 +1,6 @@
 ## Setup for new project:
 1. Create master br and development from master.
-2. Get workflows files for .github/ folder.
+2. Get workflows files for .github/ folder. Also you need to prepare secrets.
 3. Prepare package.json
 4. Prepare config.yml
 5. Prepare .gitignore
