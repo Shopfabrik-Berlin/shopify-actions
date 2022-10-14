@@ -71,19 +71,12 @@ async function clean() {
             console.log(error);
         });
 
-    const parcelFiles = assets.filter(asset => {
-        return asset.key.includes('parcel') || asset.key.includes('dev');
-    });
+    const parcelFiles = assets.filter(asset => asset.key.includes('parcel'));
 
     const listOfOldestParcelFiles = [];
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
         console.log(file.key);
-        const devAsset = file.key.includes('dev');
-        if (devAsset) {
-            listOfOldestParcelFiles.push(file);
-            return;
-        }
 
         const splittedKeyCurrent = file.key.split('.');
 
