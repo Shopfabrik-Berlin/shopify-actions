@@ -63,8 +63,6 @@ async function clean() {
         headers: {'Content-Type': 'application/json', 'X-Shopify-Access-Token': `${process.env.SHOPIFY_PASSWORD}`}
     };
 
-    console.log(getAssetsConfig);
-
     const assets = await axios(getAssetsConfig)
         .then(function (response) {
             return response.data.assets;
@@ -73,22 +71,19 @@ async function clean() {
             console.log(error);
         });
 
-    console.log(assets);
-
     const parcelFiles = assets.filter(asset => {
         return asset.key.includes('parcel') || asset.key.includes('dev');
     });
 
-    console.log(parcelFiles);
-
+    const listOfOldestParcelFiles = [];
     let listOfNewestParcelFiles = [0];
-    console.log('parcelFiles.forEach');
     parcelFiles.forEach((file, idx) => {
         console.log('ParcelFile:');
         console.log(file);
-        const devAsset = asset.key.includes('dev');
+        const devAsset = file.key.includes('dev');
         if (devAsset) {
             listOfOldestParcelFiles.push(file);
+            return;
         }
 
         const splittedKeyCurrent = file.key.split('.');
@@ -119,8 +114,6 @@ async function clean() {
     if (listOfNewestParcelFiles.length < 1 || listOfNewestParcelFiles[0] === 0) {
         return;
     }
-
-    const listOfOldestParcelFiles = [];
     parcelFiles.forEach(file => {
         const splittedKeyCurrent = file.key.split('.');
         const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
