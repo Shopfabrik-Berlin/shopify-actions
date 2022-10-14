@@ -50,10 +50,10 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 
 1. In the "scripts" of package.json . Just follow the examples below.
 
-`"critical": "concurrently \"yarn critical:index\" \"yarn critical:about\" \"yarn critical:cdp\" ",
-"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/all-styles.css --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-"critical:about": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/pages/about --file=assets/all-styles.min.css --output=snippets/critical-about.min.css.liquid --ignoreConsole=true"
-"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/collections/all --file=assets/all-styles.css --output=snippets/critical-collections-all.min.css.liquid --ignoreConsole=true"`
+`"critical": "concurrently \"yarn critical:index\" \"yarn critical:about\" \"yarn critical:cdp\" ",`
+`"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/all-styles.css --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"`
+`"critical:about": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/pages/about --file=assets/all-styles.min.css --output=snippets/critical-about.min.css.liquid --ignoreConsole=true"`
+`"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/collections/all --file=assets/all-styles.css --output=snippets/critical-collections-all.min.css.liquid --ignoreConsole=true"`
 
 2. In the snippets/critical-style-controller.liquid:
 
