@@ -19,7 +19,7 @@ When you're working on your dev theme you're getting *.dev.js(css, map) outputs.
 It requests .js for the current page. Scss files are not compiling to css. Parcel takes code from a scss file and includes classes to the body.
 
 In the main index.js file (EXAMPLE):
-`
+
     const template = window.theme.template;
     if (template == 'page.about-us') {
         // Styles splitting
@@ -28,13 +28,13 @@ In the main index.js file (EXAMPLE):
         }).catch(function (error) {
             console.warn(error);
         });
-
+        
         // Code splitting
         import("./pages/about-us.js").then(function (page) {
             // run your scripts
         });
     } 
-`
+
 
 Routes to files can be anything you like. I offer the next structure:
 - app
