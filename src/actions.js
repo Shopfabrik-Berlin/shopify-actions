@@ -78,8 +78,7 @@ async function clean() {
     const listOfOldestParcelFiles = [];
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
-        console.log('ParcelFile:');
-        console.log(file);
+        console.log(file.key);
         const devAsset = file.key.includes('dev');
         if (devAsset) {
             listOfOldestParcelFiles.push(file);
@@ -142,6 +141,7 @@ async function clean() {
                 return response;
             })
             .catch(function (error) {
+                console.log(`${file.key} was not deleted!`);
                 console.log(error);
             });
     });
