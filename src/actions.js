@@ -76,8 +76,6 @@ async function clean() {
     const listOfOldestParcelFiles = [];
     let listOfNewestParcelFiles = [0];
     parcelFiles.forEach((file, idx) => {
-        console.log(file.key);
-
         const splittedKeyCurrent = file.key.split('.');
 
         const timestampCurrent = +splittedKeyCurrent[splittedKeyCurrent.length - 2];
@@ -121,7 +119,9 @@ async function clean() {
     if (listOfOldestParcelFiles.length < 1) {
         return;
     }
-
+    console.log('/nFiles to delete')
+    console.log(listOfOldestParcelFiles)
+    console.log('\n')
     listOfOldestParcelFiles.forEach(file => {
         var delAssetConfig = {
             method: 'delete',
