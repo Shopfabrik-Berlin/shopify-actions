@@ -87,3 +87,4 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 ### To improve:
 1. yarn clean doesn't work on Windows, because some commands like rm isn't supported there. So we should resolve it somehow.
 2. Criticalcss: if url is /product/product-handle? How we can define criticalcss for the list of urls, because lots of products can use 1 template?
+3. Get rid of deprecated stuff
