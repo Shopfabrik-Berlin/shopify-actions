@@ -3,6 +3,14 @@
 2. Get workflows files for .github/ folder. Also you need to prepare secrets.
 3. Prepare package.json
 ```
+    "scripts": {
+        "dev": "concurrently \"parcel watch app/scripts/index.js --dist-dir ./assets/bundle.min.js\" \"parcel watch app/styles/index.scss --dist-dir ./assets/style.min.css\" \"theme watch -e $env\"",
+        "dev:ns": "concurrently \"parcel watch app/index.js --dist-dir ./assets\" \"theme watch -e development-ns\"",
+        "build": "parcel build app/index.js --dist-dir ./assets --no-source-maps && parcel build app/styles/index.scss --dist-dir ./assets --no-source-maps",
+        "clean": "rm -rf ./assets/index.dev.js && rm -rf ./assets/index.dev.css && rm -rf ./assets/*.map && rm -rf ./assets/*.parcel.*.js && rm -rf ./assets/*.parcel.*.css",
+        "critical": "concurrently \"yarn critical:index\" ",
+        "critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/theme.css.liquid --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
+    },
     "dependencies": {
         "@parcel/plugin": "^2.2.1",
         "@sentry/browser": "^6.17.6",
