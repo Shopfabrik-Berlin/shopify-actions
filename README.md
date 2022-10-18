@@ -105,22 +105,36 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 2. In the snippets/critical-style-controller.liquid:
 ```
 {% assign handle = template.name | append: '.' | append: template.suffix %}
+{% assign isCritical = false %}
 {% case handle %}
   {% when 'index.' %}
+    {% assign isCritical = true %}
     <style>
       {% render 'critical-index.min.css'%}
     </style>
   {% when 'page.about' %}
+    {% assign isCritical = true %}
     <style>
       {% render 'critical-page-about.min.css'%}
     </style>
   {% when 'collection.all' %}
+    {% assign isCritical = true %}
     <style>
       {% render'critical-collections-all.min.css'%}
     </style>
   {% else %}
 {% endcase %}
+
+{% unless isCritical %}
+  {% comment %} 'theme.css' - standart styles {% endcomment %}
+  <link rel="preload" href="{{ 'theme.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+{% else %}
+  {{ 'theme.min.css' | asset_url | stylesheet_tag }}
+{% endunless %}
 ```
+
+'theme.min.css' - shouldn't be included in the theme.liquid, only critical-style-controller.liquid
+
 3. "critical-style-controller.liquid" must be included in the theme.liquid.
 
 4. Include these styles to the app/styles/index.scss/
