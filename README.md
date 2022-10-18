@@ -57,6 +57,12 @@
 4. Prepare config.yml
 5. Prepare .gitignore
 6. Prepare .parcelrc
+```
+{
+  "extends": "@parcel/config-default",
+  "namers": ["parcel-namer-functional"]
+}
+```
 7. Prepare app structure
 8. Add renamer.js to app/tools/
 9. Add index.js to app/
