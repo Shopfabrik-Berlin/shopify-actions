@@ -66,7 +66,7 @@
 7. Prepare app structure
 8. Add renamer.js to app/tools/
 9. Add index.js to app/
-#### Make sure that files which you are importing in the index.js don't have names with some dots inside, e.g.: page.about-us.js. It will not work!
+#### Make sure that files which you are importing in the index.js don't have names with some dots inside, e.g.: page.about-us.js (css/scss). It will not work!
 10. Add index.scss to app/styles/
 11. Also need to add index.js to app/pages/ , this file is used on the Home Page of a store
 12. yarn install
