@@ -148,10 +148,15 @@ async function preview() {
             const devThemeId = labelDevSplitted[labelDevSplitted.length - 1];
             await downloadShopifyTheme(devThemeId, {
                 ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+            }).catch((error) => {
+                console.log("Couldn't downloadShopifyTheme using this devThemeId - " + devThemeId);
+                console.log(error);
             });
             await deployShopifyThemeByName(name, {
                 ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
-            })
+            }).catch((error) => {
+                console.log(error);
+            });
         }
         await createGitHubComment(prID, prComment)
     }
