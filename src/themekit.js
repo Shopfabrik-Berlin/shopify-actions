@@ -88,7 +88,7 @@ async function getShopifyThemes() {
  */
 async function getShopifyAssets(themeID, params = '') {
     if(!themeID) {
-      console.error('themeID is' + themeID);
+      console.error("Couldn't find theme to getShopifyAssets, themeID is " + themeID);
       return;
     }
     console.log(`/themes/${themeID}/assets.json?${params}`)

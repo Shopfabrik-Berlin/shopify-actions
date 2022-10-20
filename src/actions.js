@@ -38,7 +38,12 @@ const axios = require('axios');
  */
 async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID
-    console.log('themeID is' + themeID);
+    if (!themeID) {
+        console.error('Theme is NOT found to deploy, themeID is ' + themeID);
+        return;
+    } else {
+        console.log('Theme is found to deploy, themeID is ' + themeID);
+    }
     // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
     // to not override settings we need to ignore templates that already exist   
     const ignoredFiles = [
