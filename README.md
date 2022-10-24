@@ -1,7 +1,10 @@
 ## Setup for new project:
 1. Create master br and development from master.
 2. Get workflows files for .github/ folder. Also you need to prepare secrets.
-    2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest
+
+    2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest.
+
+
 3. Prepare package.json
 ```
     "scripts": {
