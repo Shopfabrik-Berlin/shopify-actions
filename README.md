@@ -1,6 +1,7 @@
 ## Setup for new project:
 1. Create master br and development from master.
 2. Get workflows files for .github/ folder. Also you need to prepare secrets.
+    2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest
 3. Prepare package.json
 ```
     "scripts": {
@@ -159,5 +160,4 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 
 ### To improve:
 1. yarn clean doesn't work on Windows, because some commands like rm isn't supported there. So we should resolve it somehow.
-2. Criticalcss: if url is /product/product-handle? How we can define criticalcss for the list of urls, because lots of products can use 1 template?
-3. Get rid of deprecated stuff
+2. Get rid of deprecated stuff
