@@ -86,7 +86,7 @@ Before <title> tag
 <link rel="modulepreload" href="{{ 'index.js' | asset_url }}" />
 ```
     
-Before </head>
+Before closing of the <head> tag
 ```
 <script src="{{ 'index.js' | asset_url }}" defer="defer"></script>
 ```
