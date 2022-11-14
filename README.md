@@ -5,59 +5,7 @@
     2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest.
 
 
-3. Prepare package.json
-```
-    "scripts": {
-        "dev": "concurrently \"parcel watch app/scripts/index.js --dist-dir ./assets/bundle.min.js\" \"parcel watch app/styles/index.scss --dist-dir ./assets/style.min.css\" \"theme watch -e $env\"",
-        "dev:ns": "concurrently \"parcel watch app/index.js --dist-dir ./assets\" \"theme watch -e development-ns\"",
-        "build": "parcel build app/index.js --dist-dir ./assets --no-source-maps && parcel build app/styles/index.scss --dist-dir ./assets --no-source-maps",
-        "clean": "rm -rf ./assets/index.dev.js && rm -rf ./assets/index.dev.css && rm -rf ./assets/*.map && rm -rf ./assets/*.parcel.*.js && rm -rf ./assets/*.parcel.*.css",
-        "critical": "concurrently \"yarn critical:index\" ",
-        "critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/theme.css.liquid --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-    },
-    "dependencies": {
-        "@parcel/plugin": "^2.2.1",
-        "@sentry/browser": "^6.17.6",
-        "@sentry/tracing": "^6.17.6",
-        "cheerio": "^1.0.0-rc.10",
-        "cypress": "^6.4.0",
-        "grunt": "^1.1.0",
-        "grunt-contrib-uglify": "^4.0.1",
-        "jquery": "^3.6.0",
-        "lazysizes": "^5.3.2",
-        "parcel-namer-functional": "^0.1.3",
-        "criticalcss": "filamentgroup/criticalCSS#master"
-      },
-      "devDependencies": {
-        "@parcel/transformer-sass": "^2.1.1",
-        "autoprefixer": "^10.4.12",
-        "axios": "^0.25.0",
-        "concurrently": "^7.0.0",
-        "parcel": "^2.7",
-        "postcss": "^8.4.16",
-        "postcss-custom-properties": "^12.1.9",
-        "postcss-import": "^15.0.0",
-        "yargs": "^17.3.1",
-        "cssnano": "^4.1.10",
-        "sass": "^1.23.7"
-      },
-      "parcel-namer-functional": [
-        {
-          "type": "require",
-          "file": "app/tools/renamer.js",
-          "function": "pleaseRename"
-        }
-      ],
-      "repository": "git@github.com:yours",
-      "scripts": {
-        "dev": "concurrently \"parcel watch app/scripts/index.js --dist-dir ./assets/bundle.min.js\" \"parcel watch app/styles/index.scss --dist-dir ./assets/style.min.css\" \"theme watch -e $env\"",
-        "dev:ns": "concurrently \"parcel watch app/index.js --dist-dir ./assets\" \"theme watch -e development-ns\"",
-        "build": "parcel build app/index.js --dist-dir ./assets --no-source-maps && parcel build app/styles/index.scss --dist-dir ./assets --no-source-maps",
-        "clean": "rm -rf ./assets/index.dev.js && rm -rf ./assets/index.dev.css && rm -rf ./assets/*.map && rm -rf ./assets/*.parcel.*.js && rm -rf ./assets/*.parcel.*.css",
-        "critical": "concurrently \"yarn critical:index\" ",
-        "critical:index": "criticalcss --url=https://shop.myshopify.com --file=assets/theme.css.liquid --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-      },
-```
+3. Prepare package.json from the https://github.com/Shopfabrik-Berlin/shopify-theme-starter
 4. Prepare config.yml
 5. Prepare .gitignore
 6. Prepare .parcelrc
