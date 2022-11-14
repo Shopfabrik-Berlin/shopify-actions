@@ -81,17 +81,17 @@ When you're working on your dev theme you're getting *.dev.js(css, map) outputs.
 ## Index.js
 Including to theme.liquid:
 
-Before <title> tag
+Before the title tag
 ```
 <link rel="modulepreload" href="{{ 'index.js' | asset_url }}" />
 ```
     
-Before closing of the <head> tag
+Before closing of the head tag
 ```
 <script src="{{ 'index.js' | asset_url }}" defer="defer"></script>
 ```
 
-Include heplers inside of <head> tag:
+Include heplers inside of the head tag:
 ```
 <script>
   var theme = {
