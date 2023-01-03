@@ -1,59 +1,11 @@
 ## Setup for new project:
 1. Create master br and development from master.
 2. Get workflows files for .github/ folder. Also you need to prepare secrets.
-3. Prepare package.json
-```
-    "scripts": {
-        "dev": "concurrently \"parcel watch app/scripts/index.js --dist-dir ./assets/bundle.min.js\" \"parcel watch app/styles/index.scss --dist-dir ./assets/style.min.css\" \"theme watch -e $env\"",
-        "dev:ns": "concurrently \"parcel watch app/index.js --dist-dir ./assets\" \"theme watch -e development-ns\"",
-        "build": "parcel build app/index.js --dist-dir ./assets --no-source-maps && parcel build app/styles/index.scss --dist-dir ./assets --no-source-maps",
-        "clean": "rm -rf ./assets/index.dev.js && rm -rf ./assets/index.dev.css && rm -rf ./assets/*.map && rm -rf ./assets/*.parcel.*.js && rm -rf ./assets/*.parcel.*.css",
-        "critical": "concurrently \"yarn critical:index\" ",
-        "critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/theme.css.liquid --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-    },
-    "dependencies": {
-        "@parcel/plugin": "^2.2.1",
-        "@sentry/browser": "^6.17.6",
-        "@sentry/tracing": "^6.17.6",
-        "cheerio": "^1.0.0-rc.10",
-        "cypress": "^6.4.0",
-        "grunt": "^1.1.0",
-        "grunt-contrib-uglify": "^4.0.1",
-        "jquery": "^3.6.0",
-        "lazysizes": "^5.3.2",
-        "parcel-namer-functional": "^0.1.3",
-        "criticalcss": "filamentgroup/criticalCSS#master"
-      },
-      "devDependencies": {
-        "@parcel/transformer-sass": "^2.1.1",
-        "autoprefixer": "^10.4.12",
-        "axios": "^0.25.0",
-        "concurrently": "^7.0.0",
-        "parcel": "^2.7",
-        "postcss": "^8.4.16",
-        "postcss-custom-properties": "^12.1.9",
-        "postcss-import": "^15.0.0",
-        "yargs": "^17.3.1",
-        "cssnano": "^4.1.10",
-        "sass": "^1.23.7"
-      },
-      "parcel-namer-functional": [
-        {
-          "type": "require",
-          "file": "app/tools/renamer.js",
-          "function": "pleaseRename"
-        }
-      ],
-      "repository": "git@github.com:yours",
-      "scripts": {
-        "dev": "concurrently \"parcel watch app/scripts/index.js --dist-dir ./assets/bundle.min.js\" \"parcel watch app/styles/index.scss --dist-dir ./assets/style.min.css\" \"theme watch -e $env\"",
-        "dev:ns": "concurrently \"parcel watch app/index.js --dist-dir ./assets\" \"theme watch -e development-ns\"",
-        "build": "parcel build app/index.js --dist-dir ./assets --no-source-maps && parcel build app/styles/index.scss --dist-dir ./assets --no-source-maps",
-        "clean": "rm -rf ./assets/index.dev.js && rm -rf ./assets/index.dev.css && rm -rf ./assets/*.map && rm -rf ./assets/*.parcel.*.js && rm -rf ./assets/*.parcel.*.css",
-        "critical": "concurrently \"yarn critical:index\" ",
-        "critical:index": "criticalcss --url=https://shop.myshopify.com --file=assets/theme.css.liquid --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-      },
-```
+
+    2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest.
+
+
+3. Prepare package.json from the https://github.com/Shopfabrik-Berlin/shopify-theme-starter
 4. Prepare config.yml
 5. Prepare .gitignore
 6. Prepare .parcelrc
@@ -74,12 +26,60 @@
 
 When you're working on your dev theme you're getting *.dev.js(css, map) outputs. If you're writting some js for a new page, you have to include scripts and styles to the index.js manually, also you have to add commands for creating critical css manually. Code splitting and critical css information is below.
 
+## Index.js
+Including to theme.liquid:
+
+Before the title tag
+```
+<link rel="modulepreload" href="{{ 'index.js' | asset_url }}" />
+```
+    
+Before closing of the head tag
+```
+<script src="{{ 'index.js' | asset_url }}" defer="defer"></script>
+```
+
+Include heplers inside of the head tag:
+```
+<script>
+  var theme = {
+    stylesheet: "{{ 'theme.css' | asset_url }}",
+    template: {{ template | json }},
+    routes: {
+      home: "{{ routes.root_url }}",
+      cart: "{{ routes.cart_url }}",
+      cartAdd: "{{ routes.cart_add_url | append: '.js'}}",
+      cartChange: "{{ routes.cart_change_url }}"
+    },
+    strings: {
+      addToCart: {{ 'products.product.add_to_cart' | t | json }},
+      soldOut: {{ 'products.product.sold_out' | t | json }},
+      unavailable: {{ 'products.product.unavailable' | t | json }},
+      regularPrice: {{ 'products.general.regular_price' | t | json }},
+      salePrice: {{ 'products.general.sale_price' | t | json }},
+      stockLabel: {{ 'products.product.stock_label' | t: count: '[count]' | json }},
+      willNotShipUntil: {{ 'products.product.will_not_ship_until' | t: date: '[date]' | json }},
+      willBeInStockAfter: {{ 'products.product.will_be_in_stock_after' | t: date: '[date]' | json }},
+      waitingForStock: {{ 'products.product.waiting_for_stock' | t | json }},
+      cartItems: {{ 'cart.general.item_count' | t: count: '[count]' | json }},
+      cartConfirmDelete: {{ 'cart.general.delete_confirm' | t | json }},
+      cartTermsConfirmation: {{ 'cart.general.terms_confirm' | t | json }}
+    }
+  };
+
+  document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+</script>
+```
+
 ## Code & Styles splitting:
 It requests .js for the current page. Scss files are not compiling to css. Parcel takes code from a scss file and includes classes to the body.
 
 In the main index.js file (EXAMPLE):
 
-    const template = window.theme.template;
+    const template = window.theme ? window.theme.template : null;
+    const pageType = window.theme ? window.theme.pageType : null;
+    const isCheckout = Shopify ? Shopify.Checkout : null; // to import styles and scripts for the checkout page
+    
     if (template == 'page.about-us') {
         // Styles splitting
         import('./styles/pages/about-us.scss').then(function (classes) {
@@ -105,17 +105,13 @@ Routes to files can be anything you like. I offer the next structure:
 
 ## Critical css:
 Needed for the live theme.
-It analyzes elements in the viewport and takes styles for them from --file to improve FCP. --file - minified styles from app/styles/index.scss. This file is built in the production-deploy action. CSS is stored as snippets for server-side rendering, this way is faster.
+It analyzes elements in the viewport and takes styles for them to improve FCP. CSS are stored as snippets for the server-side rendering, this way is faster.
 
 1. In the "scripts" of package.json . Just follow the examples below.
 ```
-"critical": "concurrently \"yarn critical:index\" \"yarn critical:about\" \"yarn critical:cdp\" ",
-
-"critical:index": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com --file=assets/all-styles.css --output=snippets/critical-index.min.css.liquid --ignoreConsole=true"
-
-"critical:about": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/pages/about --file=assets/all-styles.min.css --output=snippets/critical-about.min.css.liquid --ignoreConsole=true"
-
-"critical:cdp": "criticalcss --url=https://shopfabrik-ecommerce.myshopify.com/collections/all --file=assets/all-styles.css --output=snippets/critical-collections-all.min.css.liquid --ignoreConsole=true"
+"critical": "concurrently \"yarn critical:index\" \"yarn critical:product\"",
+"critical:index": "critical https://your-store.com > snippets/critical-index.min.css.liquid",
+"critical:product": "critical https://your-store.com/products/some-product > snippets/critical-product.min.css.liquid"
 ```
 2. In the snippets/critical-style-controller.liquid:
 ```
@@ -127,7 +123,7 @@ It analyzes elements in the viewport and takes styles for them from --file to im
     <style>
       {% render 'critical-index.min.css'%}
     </style>
-  {% when 'page.about' %}
+  {% when 'product.' %}
     {% assign isCritical = true %}
     <style>
       {% render 'critical-page-about.min.css'%}
@@ -159,5 +155,4 @@ It analyzes elements in the viewport and takes styles for them from --file to im
 
 ### To improve:
 1. yarn clean doesn't work on Windows, because some commands like rm isn't supported there. So we should resolve it somehow.
-2. Criticalcss: if url is /product/product-handle? How we can define criticalcss for the list of urls, because lots of products can use 1 template?
-3. Get rid of deprecated stuff
+2. Get rid of deprecated stuff
