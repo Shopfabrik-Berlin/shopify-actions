@@ -3,6 +3,7 @@
 2. Get workflows files for .github/ folder. Also you need to prepare secrets.
 
     2.1 For the preview deploy: if you want to take data from /temlates, /config etc dynamic data from your dev theme to created preview, just use e.g. dev-ns-theme_ID label for a PullRequest.
+    
     2.2 If you don't need a theme preview, just use "No Preview" label for you PR
 
 
