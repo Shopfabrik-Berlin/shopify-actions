@@ -93,8 +93,8 @@ async function clean() {
 
     const latestTimestamp = Math.max(...parcelFilesTimestampsSet);
     const toRemove = parcelFiles.filter(file => !(file.key.includes(latestTimestamp)));
-    
-
+    const criticalcssFiles = assets.filter(asset => asset.key.includes('critical') && asset.key.includes('css.lquid'));
+    toRemove.concat(criticalcssFiles);
     toRemove.forEach(file => {
         var delAssetConfig = {
             method: 'delete',
@@ -134,9 +134,6 @@ async function preview() {
 
     // Do no deploy if PR label contains 'X'
     const containsIgnoredLabel = await getPullRequestLabel();
-    console.log('--------------------containsIgnoredLabel--------------------');
-    console.log(containsIgnoredLabel);
-    console.log('--------------------containsIgnoredLabel--------------------');
     if (!!!containsIgnoredLabel) {
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['templates/']
