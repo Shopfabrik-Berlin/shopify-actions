@@ -86,15 +86,17 @@ async function clean() {
     });
 
     const parcelFilesTimestampsSet = [...new Set(parcelFilesTimestamps)];
+    const criticalcssFiles = assets.filter(asset => asset.key.includes('snippets/critical-') && asset.key.includes('min.css.liquid'));
 
-    if (parcelFilesTimestampsSet.length <= 1) {
+    if (parcelFilesTimestampsSet.length <= 1 && criticalcssFiles.length < 1) {
         return;
     }
 
     const latestTimestamp = Math.max(...parcelFilesTimestampsSet);
-    const toRemove = parcelFiles.filter(file => !(file.key.includes(latestTimestamp)));
-    const criticalcssFiles = assets.filter(asset => asset.key.includes('critical') && asset.key.includes('css.lquid'));
-    toRemove.concat(criticalcssFiles);
+    const parcelFilesFiltered = parcelFiles.filter(file => !(file.key.includes(latestTimestamp)));
+    const parcelFilesToRemove = parcelFilesFiltered.length > 0 ? parcelFilesFiltered : [];
+    const toRemove = parcelFilesToRemove.concat(criticalcssFiles);
+
     toRemove.forEach(file => {
         var delAssetConfig = {
             method: 'delete',
