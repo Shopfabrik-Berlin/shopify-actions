@@ -77,6 +77,7 @@ Include heplers inside of the head tag:
 It requests .js for the current page. Scss files are not compiling to css. Parcel takes code from a scss file and includes classes to the body.
 
 In the main index.js file (EXAMPLE):
+```
     import isSection from './tools/isSection.js';
 
     const template = window.theme ? window.theme.template : null;
@@ -112,7 +113,7 @@ In the main index.js file (EXAMPLE):
             console.warn(error);
         });
     } 
-
+```
 
 Routes to files can be anything you like. I offer the next structure:
 - app
