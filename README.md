@@ -77,31 +77,50 @@ Include heplers inside of the head tag:
 It requests .js for the current page. Scss files are not compiling to css. Parcel takes code from a scss file and includes classes to the body.
 
 In the main index.js file (EXAMPLE):
+    import isSection from './tools/isSection.js';
 
     const template = window.theme ? window.theme.template : null;
     const pageType = window.theme ? window.theme.pageType : null;
     const isCheckout = Shopify ? Shopify.Checkout : null; // to import styles and scripts for the checkout page
     
+    const selectors = {
+        sections: {
+            videoBanner: '.video-banner'
+        }
+    }
+    
+    // Split by section
+    if (isSection(selectors.sections.videoBanner)) {
+        import('./styles/sections/video-banner.scss').catch(function (error) {
+            console.warn(error);
+        });
+        
+        import("./components/video.js").catch(function (error) {
+            console.warn(error);
+        });
+    }
+    
+    // Split by page
     if (template == 'page.about-us') {
         // Styles splitting
-        import('./styles/pages/about-us.scss').then(function (classes) {
-            document.body.className = classes.body;
-        }).catch(function (error) {
+        import('./styles/pages/about-us.scss').catch(function (error) {
             console.warn(error);
         });
         
         // Code splitting
-        import("./pages/about-us.js").then(function (page) {
-            // run your scripts
+        import("./pages/about-us.js").catch(function (error) {
+            console.warn(error);
         });
     } 
 
 
 Routes to files can be anything you like. I offer the next structure:
 - app
-    - pages
-    - modules => for reusing inside of /pages
-    - components => for reusing inside of /pages
+    - styles
+        - sections
+        - index.scss
+    - modules
+    - components
     - tools => some stuff for build e.g. renamer.js
     - index.js
 
@@ -112,45 +131,29 @@ It analyzes elements in the viewport and takes styles for them to improve FCP. C
 1. In the "scripts" of package.json . Just follow the examples below.
 ```
 "critical": "concurrently \"yarn critical:index\" \"yarn critical:product\"",
-"critical:index": "critical https://your-store.com > snippets/critical-index.min.css.liquid",
-"critical:product": "critical https://your-store.com/products/some-product > snippets/critical-product.min.css.liquid"
+"critical:index": "critical https://your-store.com --dimensions 1300x900 --dimensions 425x800 > snippets/critical-index.min.css.liquid",
+"critical:product": "critical https://your-store.com/products/some-product --dimensions 1300x900 --dimensions 425x800 > snippets/critical-product.min.css.liquid"
 ```
-2. In the snippets/critical-style-controller.liquid:
+2. Add snippets/critical-style-controller.liquid to the theme.liquid
+3. Add big common css files with preloading to the theme.liquid:
+HEAD tag:
 ```
-{% assign handle = template.name | append: '.' | append: template.suffix %}
-{% assign isCritical = false %}
-{% case handle %}
-  {% when 'index.' %}
-    {% assign isCritical = true %}
-    <style>
-      {% render 'critical-index.min.css'%}
-    </style>
-  {% when 'product.' %}
-    {% assign isCritical = true %}
-    <style>
-      {% render 'critical-page-about.min.css'%}
-    </style>
-  {% when 'collection.all' %}
-    {% assign isCritical = true %}
-    <style>
-      {% render'critical-collections-all.min.css'%}
-    </style>
-  {% else %}
-{% endcase %}
-
-{% unless isCritical %}
-  {% comment %} 'theme.css' - standart styles {% endcomment %}
-  <link rel="preload" href="{{ 'theme.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-{% else %}
-  {{ 'theme.min.css' | asset_url | stylesheet_tag }}
-{% endunless %}
+<link rel="preload" id="base-css" href="{{ 'base.css' | asset_url }}" as="style"/>
+<link rel="preload" id="index-css" href="{{ 'index.css' | asset_url }}" as="style"/>
 ```
-
-'theme.min.css' - shouldn't be included in the theme.liquid, only critical-style-controller.liquid
-
-3. "critical-style-controller.liquid" must be included in the theme.liquid.
-
-4. Include these styles to the app/styles/index.scss/
+on window.load:
+```
+window.addEventListener('load',function(){ 
+    var baseCss = document.getElementById('base-css');
+    if (baseCss) {
+        baseCss.rel = 'stylesheet';
+    }
+    var indexCss = document.getElementById('index-css');
+        if (indexCss) {
+        indexCss.rel = 'stylesheet';
+    }
+});
+```
 
 ## After duplicating live to a new theme:
 1. Remove *.parcel.*.js (css) files before doing a new build. You can use yarn clean to do this, but it doesn't work on Windows 
