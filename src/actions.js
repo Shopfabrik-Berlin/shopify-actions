@@ -124,6 +124,10 @@ async function clean() {
  * 
  */
 async function preview() {
+    const containsIgnoredLabel = await getPullRequestLabel();
+    if (containsIgnoredLabel) {
+        return;
+    }
     const prID = await getPullRequestID()
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
@@ -135,7 +139,6 @@ async function preview() {
     // first we need to deploy all sections + snippets and then the template files
 
     // Do no deploy if PR label contains 'X'
-    const containsIgnoredLabel = await getPullRequestLabel();
     if (!!!containsIgnoredLabel) {
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['templates/']
