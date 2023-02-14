@@ -44,6 +44,8 @@ async function createShopifyTheme(name) {
     const theme = await findShopifyTheme(name);
     if (!theme) {
       console.log('!theme');
+      console.log('name');
+      console.log(name);
       const response = await shopify.post('/themes.json', {
         theme: {
           name
