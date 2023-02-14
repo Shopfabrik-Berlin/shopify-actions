@@ -54,6 +54,7 @@ async function createShopifyTheme(name) {
       if(response.status === 201){
         return response.data.theme
       } else {
+        console.log('response is not 201 =(');
         console.log(response)
         throw new Error(`Couldn't create theme: ${name}...`)
       }
