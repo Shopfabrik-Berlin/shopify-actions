@@ -41,12 +41,16 @@ async function deleteShopifyThemes(name) {
  */
 async function createShopifyTheme(name) {
     const theme = await findShopifyTheme(name);
+    console.log('createShopifyTheme function');
     if (!theme) {
+      console.log('!theme');
       const response = await shopify.post('/themes.json', {
         theme: {
           name
         }
-      })
+      });
+      console.log(response);
+      console.log('response');
       if(response.status === 201){
         return response.data.theme
       } else {
@@ -54,6 +58,7 @@ async function createShopifyTheme(name) {
         throw new Error(`Couldn't create theme: ${name}...`)
       }
     } else{
+        console.log('theme found!');
         const parcelJS = await getParcelFiles();
         console.log(`Found theme: ${name} with ID: ${theme.id} ...`);
         return theme
