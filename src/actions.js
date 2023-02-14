@@ -124,21 +124,14 @@ async function clean() {
  * 
  */
 async function preview() {
-    console.log('containsIgnoredLabel');
     const containsIgnoredLabel = await getPullRequestLabel();
-    console.log(containsIgnoredLabel);
     if (containsIgnoredLabel) {
-        console.log('ERROR containsIgnoredLabel');
         return;
     }
     const prID = await getPullRequestID()
-    console.log('prID');
-    console.log(prID);
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createShopifyTheme(name)
-    console.log('theme')
-    console.log(theme)
     console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
     const prComment = `Automated Message: 🚀 Deployed successfully to ${URL}`
@@ -177,6 +170,7 @@ async function preview() {
     const result = await parseGithubPR(prBody)
     if (result && result.task && result.project) {
         const prURL = await getPullRequestURL()
+        //const repositoryName = await getRepositoryName()
         const hasDeployComment = await asanaHasDeployComment(result.task)
         if (!hasDeployComment) {
             await asanaComment(
@@ -184,6 +178,11 @@ async function preview() {
                 `${prComment}\n Github Pull Request: ${prURL}`
             )
         }
+        // Check if ticket already exists
+        // const existingTicket = await asanaGetTicket(repositoryName, prID);
+        // if (!!!existingTicket) {
+        //     await asanaCreateTicket(repositoryName, prURL, URL, prID)
+        // }
     }
 }
 
