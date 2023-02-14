@@ -125,8 +125,8 @@ async function clean() {
  */
 async function preview() {
     console.log('containsIgnoredLabel');
-    console.log(containsIgnoredLabel);
     const containsIgnoredLabel = await getPullRequestLabel();
+    console.log(containsIgnoredLabel);
     if (containsIgnoredLabel) {
         console.log('ERROR containsIgnoredLabel');
         return;
@@ -137,6 +137,8 @@ async function preview() {
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createShopifyTheme(name)
+    console.log('theme')
+    console.log(theme)
     console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
     const prComment = `Automated Message: 🚀 Deployed successfully to ${URL}`
