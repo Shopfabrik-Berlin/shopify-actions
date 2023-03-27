@@ -142,7 +142,7 @@ async function preview() {
     // Do no deploy if PR label contains 'X'
     if (!!!containsIgnoredLabel) {
         await deployShopifyThemeByName(name, {
-            ignoredFiles: ['templates/']
+            ignoredFiles: ['templates/', 'sections/*.json']
         })
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
@@ -153,13 +153,13 @@ async function preview() {
             const labelDevSplitted = labelDevLowered.split('-');
             const devThemeId = labelDevSplitted[labelDevSplitted.length - 1];
             await downloadShopifyTheme(devThemeId, {
-                ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+                ignoredFiles: ['sections/*.liquid', 'snippets/', 'layout/', 'assets/']
             }).catch((error) => {
                 console.log("Couldn't downloadShopifyTheme using this devThemeId - " + devThemeId);
                 console.log(error);
             });
             await deployShopifyThemeByName(name, {
-                ignoredFiles: ['sections/', 'snippets/', 'layout/', 'assets/']
+                ignoredFiles: ['sections/*.liquid', 'snippets/', 'layout/', 'assets/']
             }).catch((error) => {
                 console.log(error);
             });
