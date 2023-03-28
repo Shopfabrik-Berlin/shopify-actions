@@ -145,7 +145,7 @@ async function preview() {
             ignoredFiles: ['templates/', 'sections/*.json']
         })
         await deployShopifyThemeByName(name, {
-            ignoredFiles: ['sections/', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })
         const labelDev = await getDevIdFromPRsLabel();
         if (labelDev) {
