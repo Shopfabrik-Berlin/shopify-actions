@@ -141,9 +141,11 @@ async function preview() {
 
     // Do no deploy if PR label contains 'X'
     if (!!!containsIgnoredLabel) {
+        // Files: sections/*.liquid
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['templates/', 'sections/*.json']
         })
+        // Files: sections/*.json
         await deployShopifyThemeByName(name, {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         })

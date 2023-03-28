@@ -33,7 +33,7 @@ jobs:
       env: 
           TIMESTAMP: ${{ steps.date.outputs.date }}
     - name: Deploy preview theme
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
+      uses: Shopfabrik-Berlin/shopify-actions@feat/sections-group-ignoring
       env:
         TASK: PREVIEW
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
