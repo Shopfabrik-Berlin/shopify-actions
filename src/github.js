@@ -91,17 +91,13 @@ async function getDevIdFromPRsLabel() {
     return pullRequestLabels.find(label => {
       const labelLowered = label.name.toLowerCase();
       const labelSplitted = labelLowered.split('-');
-      console.log('label');
-      console.log(label);
-      console.log('labelLowered');
-      console.log(labelLowered);
-      console.log('labelSplitted');
-      console.log(labelSplitted);
-      if (labelSplitted.includes(partOfDevIdLabel.toLowerCase())) {
-        // id = labelSplitted[labelSplitted.length - 1];
-        // console.log("Development theme id is " + id);
+      const isLabelDev = labelSplitted.filter(part => part.includes(partOfDevIdLabel));
+      if (isLabelDev && isLabelDev.length > 0) {
+        console.log('Development label: ', labelLowered);
         return true;
-      } 
+      } else {
+        console.log("Couldn't find development label. The label: ", labelLowered);
+      }
       return false;
     });
   } else {
