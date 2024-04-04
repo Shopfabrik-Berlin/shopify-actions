@@ -38,7 +38,6 @@ const axios = require('axios');
  */
 async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID
-    console.log('process.env:', process.env);
     if (!themeID) {
         console.error('Theme is NOT found to deploy, themeID is ' + themeID);
         return;
