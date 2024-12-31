@@ -29,7 +29,7 @@ jobs:
       env: 
         TIMESTAMP: ${{ steps.date.outputs.date }}
     - name: Deploy production theme
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: DEPLOY
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
@@ -37,7 +37,7 @@ jobs:
         SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Clean up theme
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: CLEAN
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
@@ -46,7 +46,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: yarn critical
     - name: Deploy critical
-      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: DEPLOY
         SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
