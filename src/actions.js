@@ -225,90 +225,34 @@ async function previewDelete() {
  */
 async function backup() {
     const themeID = process.env.SHOPIFY_THEME_ID;
-    
     if (!themeID) {
         console.error('No theme ID found to create a backup');
         return;
     }
-    
-    // Get the live theme details using the Shopify API
-    const getThemeDetailsConfig = {
-        method: 'get',
-        url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${themeID}.json`,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
-        }
-    };
 
     try {
-        const response = await axios(getThemeDetailsConfig);
-        const liveTheme = response.data.theme;
+        const theme = await createShopifyTheme("backup");
+        console.log('Backup theme created:', theme);
 
-        // Now, create a backup theme with the name "backup"
-        const createBackupConfig = {
-            method: 'post',
-            url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes.json`,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
-            },
-            data: {
-                theme: {
-                    name: "backup"
-                }
-            }
-        };
+        await downloadShopifyTheme(themeID, {
+            ignoredFiles: [] 
+        }).catch((error) => {
+            console.log("Couldn't download live theme - " + themeID);
+            console.log(error);
+        });
 
-        const backupResponse = await axios(createBackupConfig);
-        const backupThemeID = backupResponse.data.theme.id;
-        console.log('Backup theme created successfully:', backupResponse.data.theme);
-
-        // Now, get all assets from the live theme
-        const getAssetsConfig = {
-            method: 'get',
-            url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${themeID}/assets.json`,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
-            }
-        };
-
-        const assetsResponse = await axios(getAssetsConfig);
-        const assets = assetsResponse.data.assets;
-
-        // Loop through each asset and copy it to the backup theme
-        for (const asset of assets) {
-            const assetConfig = {
-                method: 'put',
-                url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${backupThemeID}/assets.json`,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
-                },
-                data: {
-                    asset: {
-                        key: asset.key,
-                        value: asset.value
-                    }
-                }
-            };
-
-            await axios(assetConfig)
-                .then(() => {
-                    console.log(`Asset ${asset.key} copied to backup theme`);
-                })
-                .catch((error) => {
-                    console.error(`Failed to copy asset ${asset.key}:`, error);
-                });
-        }
+        await deployShopifyThemeByName("backup", {
+            ignoredFiles: []
+        }).catch((error) => {
+            console.log("Couldn't deploy to backup theme");
+            console.log(error);
+        });
 
         console.log('Backup completed successfully.');
-
     } catch (error) {
-        console.error('Error creating theme backup:', error);
+        console.error('Error during backup process:', error);
     }
-}
+} 
 
 
 module.exports = {
