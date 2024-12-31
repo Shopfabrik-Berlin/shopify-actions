@@ -255,14 +255,55 @@ async function backup() {
             },
             data: {
                 theme: {
-                    name: "backup",
-                    src: liveTheme.src // Use the live theme's source to create a duplicate
+                    name: "backup"
                 }
             }
         };
 
         const backupResponse = await axios(createBackupConfig);
-        console.log('Backup created successfully:', backupResponse.data.theme);
+        const backupThemeID = backupResponse.data.theme.id;
+        console.log('Backup theme created successfully:', backupResponse.data.theme);
+
+        // Now, get all assets from the live theme
+        const getAssetsConfig = {
+            method: 'get',
+            url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${themeID}/assets.json`,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
+            }
+        };
+
+        const assetsResponse = await axios(getAssetsConfig);
+        const assets = assetsResponse.data.assets;
+
+        // Loop through each asset and copy it to the backup theme
+        for (const asset of assets) {
+            const assetConfig = {
+                method: 'put',
+                url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${backupThemeID}/assets.json`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
+                },
+                data: {
+                    asset: {
+                        key: asset.key,
+                        value: asset.value
+                    }
+                }
+            };
+
+            await axios(assetConfig)
+                .then(() => {
+                    console.log(`Asset ${asset.key} copied to backup theme`);
+                })
+                .catch((error) => {
+                    console.error(`Failed to copy asset ${asset.key}:`, error);
+                });
+        }
+
+        console.log('Backup completed successfully.');
 
     } catch (error) {
         console.error('Error creating theme backup:', error);
