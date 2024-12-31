@@ -241,27 +241,14 @@ async function backup() {
             console.log(error);
         });
 
-    
+        // Files: sections/*.liquid
         await deployShopifyThemeByName("backup", {
-            ignoredFiles: ['templates/', 'sections/*.json', 'locales/', 'layout/', 'config/', 'assets/']
-        }).catch((error) => {
-            console.log("Couldn't deploy sections to backup theme");
-            console.log(error);
-        });
-
+            ignoredFiles: ['templates/', 'sections/*.json']
+        })
+        // Files: sections/*.json
         await deployShopifyThemeByName("backup", {
-            ignoredFiles: ['templates/*.json', 'locales/', 'layout/', 'config/', 'assets/']
-        }).catch((error) => {
-            console.log("Couldn't deploy sections/snippets to backup theme");
-            console.log(error);
-        });
-
-        await deployShopifyThemeByName("backup", {
-            ignoredFiles: ['sections/*.liquid', 'snippets/', 'layout/', 'assets/']
-        }).catch((error) => {
-            console.log("Couldn't deploy templates to backup theme");
-            console.log(error);
-        });
+            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+        })
 
         console.log('Backup completed successfully.');
     } catch (error) {
