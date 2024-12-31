@@ -44,6 +44,11 @@ async function deploy() {
     } else {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
+    
+    // Backup the live theme before deploying the new version
+    console.log('Creating backup of live theme before deploying...');
+    await backup();
+
     // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
     // to not override settings we need to ignore templates that already exist   
     const ignoredFiles = [
@@ -215,16 +220,54 @@ async function previewDelete() {
 
 /**
  * 
- * Will backup the production template
- * The workflow .yml will also push it to a "backup" branch 
+ * Will backup the production template and name it "backup"
  * 
  */
 async function backup() {
-    const themeID = process.env.SHOPIFY_THEME_ID
-    await downloadShopifyTheme(themeID)
+    const themeID = process.env.SHOPIFY_THEME_ID;
+    
+    if (!themeID) {
+        console.error('No theme ID found to create a backup');
+        return;
+    }
+    
+    // Get the live theme details using the Shopify API
+    const getThemeDetailsConfig = {
+        method: 'get',
+        url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes/${themeID}.json`,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
+        }
+    };
+
+    try {
+        const response = await axios(getThemeDetailsConfig);
+        const liveTheme = response.data.theme;
+
+        // Now, create a backup theme with the name "backup"
+        const createBackupConfig = {
+            method: 'post',
+            url: `https://${process.env.SHOPIFY_STORE_URL}/admin/api/2022-07/themes.json`,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Access-Token': process.env.SHOPIFY_PASSWORD
+            },
+            data: {
+                theme: {
+                    name: "backup",
+                    src: liveTheme.src // Use the live theme's source to create a duplicate
+                }
+            }
+        };
+
+        const backupResponse = await axios(createBackupConfig);
+        console.log('Backup created successfully:', backupResponse.data.theme);
+
+    } catch (error) {
+        console.error('Error creating theme backup:', error);
+    }
 }
-
-
 
 
 module.exports = {
