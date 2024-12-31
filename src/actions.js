@@ -231,19 +231,24 @@ async function backup() {
     }
 
     try {
-        // Создаем пустую тему с именем 'backup'
         const theme = await createShopifyTheme("backup");
         console.log('Backup theme created:', theme);
 
-        // Скачиваем текущую live тему
         await downloadShopifyTheme(themeID, {
-            ignoredFiles: [] // Скачиваем все файлы
+            ignoredFiles: [] 
         }).catch((error) => {
             console.log("Couldn't download live theme - " + themeID);
             console.log(error);
         });
 
-        // Деплоим сначала sections и snippets файлы
+    
+        await deployShopifyThemeByName("backup", {
+            ignoredFiles: ['templates/', 'sections/*.json', 'locales/', 'layout/', 'config/', 'assets/']
+        }).catch((error) => {
+            console.log("Couldn't deploy sections to backup theme");
+            console.log(error);
+        });
+
         await deployShopifyThemeByName("backup", {
             ignoredFiles: ['templates/*.json', 'locales/', 'layout/', 'config/', 'assets/']
         }).catch((error) => {
@@ -251,7 +256,6 @@ async function backup() {
             console.log(error);
         });
 
-        // Деплоим оставшиеся файлы включая templates
         await deployShopifyThemeByName("backup", {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'layout/', 'assets/']
         }).catch((error) => {
@@ -263,7 +267,7 @@ async function backup() {
     } catch (error) {
         console.error('Error during backup process:', error);
     }
-} 
+}
 
 
 
