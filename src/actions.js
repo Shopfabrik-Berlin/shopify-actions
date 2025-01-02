@@ -225,13 +225,17 @@ async function previewDelete() {
  */
 async function backup() {
     const themeID = process.env.SHOPIFY_THEME_ID;
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
+    const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}`;
+    const BACKUP_NAME = `⚠[BACKUP] ${formattedDate} ${formattedTime}`;
     if (!themeID) {
         console.error('No theme ID found to create a backup');
         return;
     }
 
     try {
-        const theme = await createShopifyTheme("backup");
+        const theme = await createShopifyTheme(BACKUP_NAME);
         console.log('Backup theme created:', theme);
 
         await downloadShopifyTheme(themeID, {
@@ -241,14 +245,13 @@ async function backup() {
             console.log(error);
         });
 
-        // Files: sections/*.liquid
-        await deployShopifyThemeByName("backup", {
+        await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['templates/', 'sections/*.json']
-        })
-        // Files: sections/*.json
-        await deployShopifyThemeByName("backup", {
+        });
+
+        await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
-        })
+        });
 
         console.log('Backup completed successfully.');
     } catch (error) {
