@@ -138,7 +138,6 @@ async function preview() {
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createShopifyTheme(name)
-    console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
     const prComment = `Automated Message: 🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
@@ -226,9 +225,9 @@ async function previewDelete() {
 async function backup() {
     const themeID = process.env.SHOPIFY_THEME_ID;
     const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
-    const formattedTime = `${currentDate.getHours().toString().padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}`;
-    const BACKUP_NAME = `⚠[BACKUP] ${formattedDate} ${formattedTime}`;
+    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;  
+    let releaseTag = await getShopifyReleaseTag(themeID) || '';
+    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Tag: ${releaseTag} Date: ${formattedDate}`;
     if (!themeID) {
         console.error('No theme ID found to create a backup');
         return;
