@@ -226,8 +226,7 @@ async function backup() {
     const themeID = process.env.SHOPIFY_THEME_ID;
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;  
-    let releaseTag = await getShopifyReleaseTag(themeID) || '';
-    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Release: ${releaseTag} Date: ${formattedDate}`;
+    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
     if (!themeID) {
         console.error('No theme ID found to create a backup');
         return;
