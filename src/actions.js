@@ -57,20 +57,32 @@ async function deploy() {
         const theme = await createShopifyTheme(BACKUP_NAME);
         console.log('Backup theme created:', theme);
 
-        await downloadShopifyTheme(themeID, { ignoredFiles: [] });
-        console.log(`Live theme ${themeID} downloaded successfully.`);
+        try {
+            await downloadShopifyTheme(themeID, { ignoredFiles: [] });
+            console.log(`Live theme ${themeID} downloaded successfully.`);
+        } catch (error) {
+            console.log('Error during downloadShopifyTheme:', error);
+        }
 
         await delay(1000);
 
-        await deployShopifyThemeByName(BACKUP_NAME, {
-            ignoredFiles: ['templates/', 'sections/*.json']
-        });
+        try {
+            await deployShopifyThemeByName(BACKUP_NAME, {
+                ignoredFiles: ['templates/', 'sections/*.json']
+            });
+        } catch (error) {
+            console.log('Error during deployShopifyThemeByName (1):', error);
+        }
 
         await delay(1000);
 
-        await deployShopifyThemeByName(BACKUP_NAME, {
-            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
-        });
+        try {
+            await deployShopifyThemeByName(BACKUP_NAME, {
+                ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+            });
+        } catch (error) {
+            console.log('Error during deployShopifyThemeByName (2):', error);
+        }
 
         console.log('Backup completed successfully.');
 
@@ -83,14 +95,17 @@ async function deploy() {
 
         await delay(1000);
 
-        await deployShopifyTheme(themeID, { ignoredFiles });
-        console.log('Deployment completed successfully.');
+        try {
+            await deployShopifyTheme(themeID, { ignoredFiles });
+            console.log('Deployment completed successfully.');
+        } catch (error) {
+            console.log('Error during deployShopifyTheme (final):', error);
+        }
 
     } catch (error) {
         console.error('Error during backup or deployment process:', error);
     }
 }
-
 
 /**
  * 
