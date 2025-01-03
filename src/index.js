@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const {
     preview,
+    backupLive,
     deploy,
     previewDelete,
     backup,
