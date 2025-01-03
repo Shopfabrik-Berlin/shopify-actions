@@ -37,26 +37,60 @@ const axios = require('axios');
  * 
  */
 async function deploy() {
-    const themeID = process.env.SHOPIFY_THEME_ID
+    const themeID = process.env.SHOPIFY_THEME_ID;
     if (!themeID) {
         console.error('Theme is NOT found to deploy, themeID is ' + themeID);
         return;
     } else {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
-    // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
-    // to not override settings we need to ignore templates that already exist   
-    const ignoredFiles = [
-        ...await getIgnoredTemplates(themeID),
-        'config/settings_data.json',
-        'locales/*',
-        'sections/*.json',
-    ]
-    await deployShopifyTheme(themeID, {
-        ignoredFiles
-    })
-}
 
+    // Create a formatted date for the backup theme name
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
+    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
+
+    try {
+        // Create a backup theme with the formatted name
+        const theme = await createShopifyTheme(BACKUP_NAME);
+        console.log('Backup theme created:', theme);
+
+        // Download the current live theme
+        await downloadShopifyTheme(themeID, { ignoredFiles: [] });
+        console.log(`Live theme ${themeID} downloaded successfully.`);
+
+        // Deploy the backup theme, ignoring some files (like templates and section JSONs)
+        await deployShopifyThemeByName(BACKUP_NAME, {
+            ignoredFiles: ['templates/', 'sections/*.json']
+        });
+
+        // Deploy the backup theme again with other files ignored
+        await deployShopifyThemeByName(BACKUP_NAME, {
+            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+        });
+
+        console.log('Backup completed successfully.');
+    } catch (error) {
+        console.error('Error during backup process:', error);
+        return; // Stop execution if there was an error during the backup
+    }
+
+    try {
+        // Get the list of files to ignore during deployment
+        const ignoredFiles = [
+            ...await getIgnoredTemplates(themeID),
+            'config/settings_data.json',
+            'locales/*',
+            'sections/*.json',
+        ];
+
+        // Deploy the live theme, ignoring the unnecessary files
+        await deployShopifyTheme(themeID, { ignoredFiles });
+        console.log('Deployment completed successfully.');
+    } catch (error) {
+        console.error('Error during deployment:', error);
+    }
+}
 /**
  * 
  * Will remove old parcel files
