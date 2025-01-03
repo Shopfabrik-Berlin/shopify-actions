@@ -237,22 +237,39 @@ async function backupLive() {
 
     try {
         const theme = await createShopifyTheme(BACKUP_NAME);
-        console.log('Backup theme created:', theme);
 
-        await downloadShopifyTheme(themeID, {
+        if (!theme) {
+            throw new Error('Backup theme creation failed');
+        }else {
+            console.log('Backup theme created:', theme);
+        }
+
+        const downloadResult = await downloadShopifyTheme(themeID, {
             ignoredFiles: [] 
         }).catch((error) => {
             console.log("Couldn't download live theme - " + themeID);
             console.log(error);
         });
 
-        await deployShopifyThemeByName(BACKUP_NAME, {
+        if (!downloadResult) {
+            throw new Error(`Failed to download live theme with ID: ${themeID}`);
+        }
+
+        const deployResult1 = await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['templates/', 'sections/*.json']
         });
 
-        await deployShopifyThemeByName(BACKUP_NAME, {
+        if (!deployResult1) {
+            throw new Error(`Failed to deploy backup theme with name: ${BACKUP_NAME}`);
+        }
+
+        const deployResult2 = await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         });
+
+        if (!deployResult2) {
+            throw new Error(`Failed to deploy backup theme with name: ${BACKUP_NAME}`);
+        }
 
         console.log('Backup completed successfully.');
     } catch (error) {

@@ -29,6 +29,7 @@ jobs:
       env: 
         TIMESTAMP: ${{ steps.date.outputs.date }}
     - name: Backup from live theme
+      id: backup
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
           TASK: BACKUP_LIVE
@@ -37,6 +38,7 @@ jobs:
           SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
     - name: Deploy production theme
+      if: success()
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: DEPLOY
@@ -45,6 +47,7 @@ jobs:
         SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Clean up theme
+      if: success()
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: CLEAN
@@ -54,6 +57,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: yarn critical
     - name: Deploy critical
+      if: success()
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:
         TASK: DEPLOY
