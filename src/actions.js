@@ -36,6 +36,8 @@ const axios = require('axios');
  * Will deploy a theme 
  * 
  */
+
+
 async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID
     if (!themeID) {
@@ -45,9 +47,14 @@ async function deploy() {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
     
-    // Backup the live theme before deploying the new version
     console.log('Creating backup of live theme before deploying...');
-    await backup();
+    try {
+        await backup();
+        console.log('Backup successful.');
+    } catch (error) {
+        console.error('Backup failed:', error);
+        return;
+    }
 
     // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
     // to not override settings we need to ignore templates that already exist   
@@ -57,9 +64,14 @@ async function deploy() {
         'locales/*',
         'sections/*.json',
     ]
-    await deployShopifyTheme(themeID, {
-        ignoredFiles
-    })
+    try {
+        await deployShopifyTheme(themeID, {
+            ignoredFiles
+        });
+        console.log('Deployment completed successfully.');
+    } catch (error) {
+        console.error('Error during deployment:', error);
+    }
 }
 
 /**
@@ -219,7 +231,7 @@ async function previewDelete() {
 
 /**
  * 
- * Will backup the production template and name it "backup"
+ * Will backup the production theme 
  * 
  */
 async function backup() {
