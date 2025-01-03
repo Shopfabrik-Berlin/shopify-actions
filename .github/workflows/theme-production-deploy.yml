@@ -28,6 +28,14 @@ jobs:
     - run: yarn build
       env: 
         TIMESTAMP: ${{ steps.date.outputs.date }}
+    - name: Backup from live theme
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
+      env:
+          TASK: BACKUP_LIVE
+          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
     - name: Deploy production theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
       env:

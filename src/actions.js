@@ -36,75 +36,25 @@ const axios = require('axios');
  * Will deploy a theme 
  * 
  */
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 async function deploy() {
-    const themeID = process.env.SHOPIFY_THEME_ID;
+    const themeID = process.env.SHOPIFY_THEME_ID
     if (!themeID) {
         console.error('Theme is NOT found to deploy, themeID is ' + themeID);
         return;
     } else {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
-
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
-    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
-
-    try {
-        const theme = await createShopifyTheme(BACKUP_NAME);
-        console.log('Backup theme created:', theme);
-
-        try {
-            await downloadShopifyTheme(themeID, { ignoredFiles: [] });
-            console.log(`Live theme ${themeID} downloaded successfully.`);
-        } catch (error) {
-            console.log('Error during downloadShopifyTheme:', error);
-        }
-
-        await delay(1000);
-
-        try {
-            await deployShopifyThemeByName(BACKUP_NAME, {
-                ignoredFiles: ['templates/', 'sections/*.json']
-            });
-        } catch (error) {
-            console.log('Error during deployShopifyThemeByName (1):', error);
-        }
-
-        await delay(1000);
-
-        try {
-            await deployShopifyThemeByName(BACKUP_NAME, {
-                ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
-            });
-        } catch (error) {
-            console.log('Error during deployShopifyThemeByName (2):', error);
-        }
-
-        console.log('Backup completed successfully.');
-
-        const ignoredFiles = [
-            ...await getIgnoredTemplates(themeID),
-            'config/settings_data.json',
-            'locales/*',
-            'sections/*.json',
-        ];
-
-        await delay(1000);
-
-        try {
-            await deployShopifyTheme(themeID, { ignoredFiles });
-            console.log('Deployment completed successfully.');
-        } catch (error) {
-            console.log('Error during deployShopifyTheme (final):', error);
-        }
-
-    } catch (error) {
-        console.error('Error during backup or deployment process:', error);
-    }
+    // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
+    // to not override settings we need to ignore templates that already exist   
+    const ignoredFiles = [
+        ...await getIgnoredTemplates(themeID),
+        'config/settings_data.json',
+        'locales/*',
+        'sections/*.json',
+    ]
+    await deployShopifyTheme(themeID, {
+        ignoredFiles
+    })
 }
 
 /**
@@ -275,10 +225,49 @@ async function backup() {
 }
 
 
+async function backupLive() {
+    const themeID = process.env.SHOPIFY_THEME_ID
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;  
+    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
+    if (!themeID) {
+        console.error('No theme ID found to create a backup');
+        return;
+    }
+
+    try {
+        const theme = await createShopifyTheme(BACKUP_NAME);
+        console.log('Backup theme created:', theme);
+
+        await downloadShopifyTheme(themeID, {
+            ignoredFiles: [] 
+        }).catch((error) => {
+            console.log("Couldn't download live theme - " + themeID);
+            console.log(error);
+        });
+
+        await deployShopifyThemeByName(BACKUP_NAME, {
+            ignoredFiles: ['templates/', 'sections/*.json']
+        });
+
+        await deployShopifyThemeByName(BACKUP_NAME, {
+            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
+        });
+
+        console.log('Backup completed successfully.');
+    } catch (error) {
+        console.error('Error during backup process:', error);
+    }
+}
+
+
+
+
 module.exports = {
     deploy,
     preview,
     previewDelete,
     backup,
-    clean
+    clean,
+    backupLive
 }

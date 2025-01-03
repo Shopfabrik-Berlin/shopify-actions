@@ -22,6 +22,8 @@ async function run() {
 
     if(task === "PREVIEW"){
         await preview()
+    } else if(task === "BACKUP_LIVE"){
+        await backupLive()
     } else if(task === "DEPLOY"){
         await deploy()
     } else if(task === "BACKUP"){
