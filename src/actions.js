@@ -36,8 +36,6 @@ const axios = require('axios');
  * Will deploy a theme 
  * 
  */
-
-
 async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID
     if (!themeID) {
@@ -46,16 +44,6 @@ async function deploy() {
     } else {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
-    
-    console.log('Creating backup of live theme before deploying...');
-    try {
-        await backup();
-        console.log('Backup successful.');
-    } catch (error) {
-        console.error('Backup failed:', error);
-        return;
-    }
-
     // getIgnoredTemplates - Shopify 2.0 Themes will save customizer config in templates/*.json
     // to not override settings we need to ignore templates that already exist   
     const ignoredFiles = [
@@ -64,14 +52,9 @@ async function deploy() {
         'locales/*',
         'sections/*.json',
     ]
-    try {
-        await deployShopifyTheme(themeID, {
-            ignoredFiles
-        });
-        console.log('Deployment completed successfully.');
-    } catch (error) {
-        console.error('Error during deployment:', error);
-    }
+    await deployShopifyTheme(themeID, {
+        ignoredFiles
+    })
 }
 
 /**
@@ -150,6 +133,7 @@ async function preview() {
     const name = `${PREVIEW_NAME} #${prID}`
     const storeURL = process.env.SHOPIFY_STORE_URL
     const theme = await createShopifyTheme(name)
+    console.log("TEST", theme, prID)
     const URL = `http://${storeURL}/?preview_theme_id=${theme.id}`;
     const prComment = `Automated Message: 🚀 Deployed successfully to ${URL}`
     // themkit issue - (Section type 'xxx' does not refer to an existing section file) because theme is empty
@@ -231,44 +215,14 @@ async function previewDelete() {
 
 /**
  * 
- * Will backup the production theme 
+ * Will backup the production template
+ * The workflow .yml will also push it to a "backup" branch 
  * 
  */
 async function backup() {
-    const themeID = process.env.SHOPIFY_THEME_ID;
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;  
-    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
-    if (!themeID) {
-        console.error('No theme ID found to create a backup');
-        return;
-    }
-
-    try {
-        const theme = await createShopifyTheme(BACKUP_NAME);
-        console.log('Backup theme created:', theme);
-
-        await downloadShopifyTheme(themeID, {
-            ignoredFiles: [] 
-        }).catch((error) => {
-            console.log("Couldn't download live theme - " + themeID);
-            console.log(error);
-        });
-
-        await deployShopifyThemeByName(BACKUP_NAME, {
-            ignoredFiles: ['templates/', 'sections/*.json']
-        });
-
-        await deployShopifyThemeByName(BACKUP_NAME, {
-            ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
-        });
-
-        console.log('Backup completed successfully.');
-    } catch (error) {
-        console.error('Error during backup process:', error);
-    }
+    const themeID = process.env.SHOPIFY_THEME_ID
+    await downloadShopifyTheme(themeID)
 }
-
 
 
 module.exports = {
