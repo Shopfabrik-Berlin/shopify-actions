@@ -36,6 +36,10 @@ const axios = require('axios');
  * Will deploy a theme 
  * 
  */
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function deploy() {
     const themeID = process.env.SHOPIFY_THEME_ID;
     if (!themeID) {
@@ -45,7 +49,6 @@ async function deploy() {
         console.log('Theme is found to deploy, themeID is ' + themeID);
     }
 
-   
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
     const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
@@ -57,12 +60,14 @@ async function deploy() {
         await downloadShopifyTheme(themeID, { ignoredFiles: [] });
         console.log(`Live theme ${themeID} downloaded successfully.`);
 
-        // Deploy the backup theme, ignoring some files (like templates and section JSONs)
+        await delay(1000);
+
         await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['templates/', 'sections/*.json']
         });
 
-        // Deploy the backup theme again with other files ignored
+        await delay(1000);
+
         await deployShopifyThemeByName(BACKUP_NAME, {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         });
@@ -76,7 +81,8 @@ async function deploy() {
             'sections/*.json',
         ];
 
-        // Deploy the live theme, ignoring the unnecessary files
+        await delay(1000);
+
         await deployShopifyTheme(themeID, { ignoredFiles });
         console.log('Deployment completed successfully.');
 
@@ -84,6 +90,7 @@ async function deploy() {
         console.error('Error during backup or deployment process:', error);
     }
 }
+
 
 /**
  * 
