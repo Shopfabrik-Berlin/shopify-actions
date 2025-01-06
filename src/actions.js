@@ -229,7 +229,7 @@ async function backupLive() {
     const themeID = process.env.SHOPIFY_THEME_ID
     const currentDate = new Date();
     const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;  
-    const BACKUP_NAME = `⚠[BACKUP: ${themeID}] Date: ${formattedDate}`;
+    const BACKUP_NAME = `[BACKUP: ${themeID}] Date: ${formattedDate}`;
     if (!themeID) {
         console.error('No theme ID found to create a backup');
         return;
@@ -237,7 +237,7 @@ async function backupLive() {
 
     try {
         const theme = await createShopifyTheme(BACKUP_NAME);
-
+        const backupThemeId = theme.id
         if (!theme) {
             throw new Error('Backup theme creation failed');
         }else {
@@ -255,20 +255,20 @@ async function backupLive() {
             throw new Error(`Failed to download live theme with ID: ${themeID}`);
         }
 
-        const deployResult1 = await deployShopifyThemeByName(BACKUP_NAME, {
+        const deployResult1 = await deployShopifyTheme(backupThemeId, {
             ignoredFiles: ['templates/', 'sections/*.json']
         });
 
         if (!deployResult1) {
-            throw new Error(`Failed to deploy backup theme with name: ${BACKUP_NAME}`);
+            throw new Error(`Failed to deploy backup theme with id: ${backupThemeId}`);
         }
 
-        const deployResult2 = await deployShopifyThemeByName(BACKUP_NAME, {
+        const deployResult2 = await deployShopifyTheme(backupThemeId, {
             ignoredFiles: ['sections/*.liquid', 'snippets/', 'locales/', 'layout/', 'config/', 'assets/']
         });
 
         if (!deployResult2) {
-            throw new Error(`Failed to deploy backup theme with name: ${BACKUP_NAME}`);
+            throw new Error(`Failed to deploy backup theme with id: ${backupThemeId}`);
         }
 
         console.log('Backup completed successfully.');

@@ -41,6 +41,7 @@ async function deleteShopifyThemes(name) {
  */
 async function createShopifyTheme(name) {
     const theme = await findShopifyTheme(name);
+ 
     if (!theme) {
       const response = await shopify.post('/themes.json', {
         theme: {
