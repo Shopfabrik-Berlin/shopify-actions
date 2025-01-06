@@ -1,9 +1,9 @@
-FROM python:2.7-alpine
+FROM node:14.17.5-alpine3.14
 
-RUN apk add --update curl
-RUN curl -s https://shopify.dev/themekit.py | python
 
-COPY "entrypoint.sh" "/entrypoint.sh"
-RUN chmod +x /entrypoint.sh
+COPY . /shopify-action
+# Install themekit dependecies 
+RUN cd /shopify-action && yarn install
+RUN chmod +x /shopify-action/entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/shopify-action/entrypoint.sh"]

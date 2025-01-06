@@ -1,0 +1,26 @@
+name: Asana Github PR Attachment
+
+on:
+  workflow_call:
+    secrets:
+      ASANA_SECRET:
+        required: true
+    outputs:
+      status:
+        description: "Log output status"
+        value: ${{ jobs.create_asana_attachment_job.outputs.status  }}
+
+jobs:
+  create_asana_attachment_job:
+    runs-on: ubuntu-latest
+    name: Create pull request attachments on Asana tasks
+    outputs:
+      status: ${{ steps.postAttachment.outputs.status }}
+    steps:
+      - name: Create pull request attachments
+        uses: Asana/create-app-attachment-github-action@latest
+        id: postAttachment
+        with:
+          asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Log output status
+        run: echo "Status is ${{ steps.postAttachment.outputs.status }}"

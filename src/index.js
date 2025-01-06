@@ -1,0 +1,45 @@
+const core = require('@actions/core');
+const {
+    preview,
+    backupLive,
+    deploy,
+    previewDelete,
+    backup,
+    clean
+  } = require('./actions');
+
+
+/**
+ * 
+ * Main run function 
+ * Will decide which TASK should run based on ENV from the workflow .yml
+ * 
+ */
+async function run() {
+  try {
+    const task = process.env.TASK;
+
+    console.log(`Preparing themekit action: ${task}`);
+
+    if(task === "PREVIEW"){
+        await preview()
+    } else if(task === "BACKUP_LIVE"){
+        await backupLive()
+    } else if(task === "DEPLOY"){
+        await deploy()
+    } else if(task === "BACKUP"){
+        await backup()
+    } else if(task === "PREVIEW_DELETE"){
+        await previewDelete()
+    } else if(task === "CLEAN"){
+      await clean()
+    } else {
+        core.setFailed(`Error, unknown action ${task}`);
+    }
+
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+run()

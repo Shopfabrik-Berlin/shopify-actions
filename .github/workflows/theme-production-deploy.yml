@@ -1,0 +1,67 @@
+name: Production - Theme Shopify deploy to Production
+
+on:
+  workflow_call:
+    secrets:
+      SHOPIFY_PASSWORD:
+        required: true
+      SHOPIFY_STORE_URL:
+        required: true
+      SHOPIFY_THEME_ID:
+        required: true
+      SHOPIFY_LOCALE:
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:  
+    - name: Check out Git repository
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - run: yarn install
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(($(date +'%s%N')/1000000))"
+    - run: yarn build
+      env: 
+        TIMESTAMP: ${{ steps.date.outputs.date }}
+    - name: Backup from live theme
+      id: backup
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
+      env:
+          TASK: BACKUP_LIVE
+          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+    - name: Deploy production theme
+      if: success()
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
+      env:
+        TASK: DEPLOY
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Clean up theme
+      if: success()
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
+      env:
+        TASK: CLEAN
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: yarn critical
+    - name: Deploy critical
+      if: success()
+      uses: Shopfabrik-Berlin/shopify-actions@shopify-2.2
+      env:
+        TASK: DEPLOY
+        SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+        SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+        SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
