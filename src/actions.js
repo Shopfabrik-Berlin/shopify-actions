@@ -237,7 +237,8 @@ async function backupLive() {
 
     try {
         const theme = await createShopifyTheme(BACKUP_NAME);
-        const backupThemeId = theme.id
+        const backupThemeId = theme.id;
+        console.log('backupThemeId', backupThemeId)
         if (!theme) {
             throw new Error('Backup theme creation failed');
         }else {
