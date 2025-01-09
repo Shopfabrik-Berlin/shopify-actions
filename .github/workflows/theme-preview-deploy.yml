@@ -32,6 +32,7 @@ jobs:
     - run: yarn build
       env: 
           TIMESTAMP: ${{ steps.date.outputs.date }}
+          NODE_OPTIONS: "--max_old_space_size=4096"
     - name: Deploy preview theme
       uses: Shopfabrik-Berlin/shopify-actions@shopify-2.1
       env:
