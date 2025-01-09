@@ -22,9 +22,12 @@ jobs:
     steps:  
     - name: Check out Git repository
       uses: actions/checkout@v3
+    - name: Increase Node.js memory limit
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
     - uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
     - run: yarn install
     - name: Get current date
       id: date
