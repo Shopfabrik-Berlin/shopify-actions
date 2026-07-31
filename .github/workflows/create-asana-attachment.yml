@@ -15,12 +15,27 @@ jobs:
     runs-on: ubuntu-latest
     name: Create pull request attachments on Asana tasks
     outputs:
-      status: ${{ steps.postAttachment.outputs.status }}
+      status: ${{ steps.postAttachmentRetry.outputs.status || steps.postAttachment.outputs.status }}
     steps:
       - name: Create pull request attachments
-        uses: Asana/create-app-attachment-github-action@latest
+        uses: Asana/create-app-attachment-github-action@v1.3
         id: postAttachment
+        continue-on-error: true
         with:
           asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Retry pull request attachments
+        if: steps.postAttachment.outcome == 'failure'
+        uses: Asana/create-app-attachment-github-action@v1.3
+        id: postAttachmentRetry
+        with:
+          asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Fail if Asana attachment could not be created
+        if: steps.postAttachment.outcome == 'failure' && steps.postAttachmentRetry.outcome == 'failure'
+        run: |
+          echo "Asana PR attachment failed after two attempts."
+          exit 1
       - name: Log output status
-        run: echo "Status is ${{ steps.postAttachment.outputs.status }}"
+        if: always()
+        run: |
+          STATUS="${{ steps.postAttachmentRetry.outputs.status || steps.postAttachment.outputs.status }}"
+          echo "Status is ${STATUS:-unknown}"

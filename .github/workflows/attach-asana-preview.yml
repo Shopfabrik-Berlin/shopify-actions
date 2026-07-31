@@ -1,0 +1,67 @@
+name: Attach theme preview to Asana task
+
+on:
+  workflow_call:
+    inputs:
+      preview_url:
+        required: true
+        type: string
+      pr_body:
+        required: true
+        type: string
+      pr_number:
+        required: true
+        type: string
+    secrets:
+      ASANA_TOKEN:
+        required: true
+
+jobs:
+  attach-preview:
+    runs-on: ubuntu-latest
+    name: Attach preview URL to linked Asana task
+    steps:
+      - name: Attach preview theme URL
+        env:
+          ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+          PREVIEW_URL: ${{ inputs.preview_url }}
+          PR_BODY: ${{ inputs.pr_body }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          TASK_ID=$(printf '%s' "$PR_BODY" | grep -oE 'https://app\.asana\.com/[0-9]+/[0-9]+/[0-9]+' | head -1 | grep -oE '[0-9]+$' || true)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Asana task URL found in PR body, skipping preview attachment."
+            exit 0
+          fi
+
+          ATTACHMENT_NAME="Theme Preview - PR #${PR_NUMBER}"
+          EXISTING_GID=$(curl -sf \
+            -H "Authorization: Bearer ${ASANA_TOKEN}" \
+            "https://app.asana.com/api/1.0/tasks/${TASK_ID}/attachments?opt_fields=name,resource_subtype,permanent_url,view_url" \
+            | jq -r --arg NAME "$ATTACHMENT_NAME" '.data[] | select(.name == $NAME and .resource_subtype == "external") | .gid' | head -1)
+
+          if [ -n "$EXISTING_GID" ] && [ "$EXISTING_GID" != "null" ]; then
+            EXISTING_URL=$(curl -sf \
+              -H "Authorization: Bearer ${ASANA_TOKEN}" \
+              "https://app.asana.com/api/1.0/attachments/${EXISTING_GID}?opt_fields=permanent_url,view_url" \
+              | jq -r '.data.permanent_url // .data.view_url // empty')
+
+            if [ "$EXISTING_URL" = "$PREVIEW_URL" ]; then
+              echo "Preview attachment already up to date for task ${TASK_ID}."
+              exit 0
+            fi
+
+            echo "Replacing outdated preview attachment ${EXISTING_GID}."
+            curl -sf -X DELETE \
+              -H "Authorization: Bearer ${ASANA_TOKEN}" \
+              "https://app.asana.com/api/1.0/attachments/${EXISTING_GID}"
+          fi
+
+          curl -sf -X POST "https://app.asana.com/api/1.0/attachments" \
+            -H "Authorization: Bearer ${ASANA_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"data\":{\"resource_subtype\":\"external\",\"parent\":\"${TASK_ID}\",\"url\":\"${PREVIEW_URL}\",\"name\":\"${ATTACHMENT_NAME}\"}}"
+
+          echo "Attached preview URL to Asana task ${TASK_ID}."

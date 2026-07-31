@@ -8,7 +8,6 @@ const REGEX = new RegExp(
 );
 
 const labelToNotMerge = "No Preview";
-const partOfDevIdLabel = "dev";
 
 async function createGitHubDeployment(url) {
   const deployment = await octokit.repos.createDeployment({
@@ -88,22 +87,18 @@ async function getPullRequestLabel() {
 async function getDevIdFromPRsLabel() {
   const pullRequestLabels = github.context.payload.pull_request.labels;
   if (!!pullRequestLabels.length) {
-    return pullRequestLabels.find(label => {
-      const labelLowered = label.name.toLowerCase();
-      const labelSplitted = labelLowered.split('-');
-      const isLabelDev = labelSplitted.filter(part => part.includes(partOfDevIdLabel));
-      if (isLabelDev && isLabelDev.length > 0) {
-        console.log('Development label: ', labelLowered);
-        return true;
-      } else {
-        console.log("Couldn't find development label. The label: ", labelLowered);
-      }
-      return false;
-    });
+    const devLabel = pullRequestLabels.find(label =>
+      /dev-[a-z]+-\d+/i.test(label.name)
+    );
+    if (devLabel) {
+      console.log('Development label: ', devLabel.name.toLowerCase());
+      return devLabel;
+    }
+    console.log("Couldn't find development label matching dev-[a-z]+-[0-9]+");
   } else {
     console.log("Development theme id is null");
-    return null;
   }
+  return null;
 };
 
 /**
