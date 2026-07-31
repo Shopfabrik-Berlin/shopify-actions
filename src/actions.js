@@ -172,7 +172,7 @@ async function preview() {
 
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
-    if (result && result.task && result.project) {
+    if (result && result.task) {
         const prURL = await getPullRequestURL()
         await asanaUpsertPreviewAttachment(result.task, URL, prID)
         const hasDeployComment = await asanaHasDeployComment(result.task)
@@ -196,7 +196,7 @@ async function previewDelete() {
     const prBody = await getPullRequestBody()
     const result = await parseGithubPR(prBody)
     console.log('removing preview')
-    if (result && result.task && result.project) {
+    if (result && result.task) {
         const repositoryName = await getRepositoryName()
         const existingTicket = await asanaGetTicket(repositoryName, prID);
         if (!!existingTicket) {

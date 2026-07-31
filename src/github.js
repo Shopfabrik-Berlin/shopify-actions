@@ -3,7 +3,7 @@ const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 const commentIdentifier =
   "<!-- Comment by Shopify Theme Deploy Previews Action -->";
 const REGEX = new RegExp(
-  `https:\\/\\/app.asana.com\\/(\\d+)\\/(?<project>\\d+)\\/(?<task>\\d+)`,
+  `https:\\/\\/app\\.asana\\.com\\/[^\\s]+\\/task\\/(?<task>\\d+)`,
   'g'
 );
 
